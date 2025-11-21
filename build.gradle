@@ -1,0 +1,32 @@
+plugins {
+    id 'java-library'
+}
+
+allprojects {
+    group = 'io.hypercell'
+    version = '0.1.0-SNAPSHOT'
+    
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        implementation 'org.slf4j:slf4j-api:2.0.9'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}

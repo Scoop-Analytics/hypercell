@@ -1,0 +1,5 @@
+rootProject.name = 'hypercell'
+include 'hypercell-api'
+include 'hypercell-formula'
+include 'hypercell-functions'
+include 'hypercell-core'

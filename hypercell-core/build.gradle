@@ -1,0 +1,9 @@
+dependencies {
+    api project(':hypercell-api')
+    api project(':hypercell-formula')
+    implementation project(':hypercell-functions')
+    
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'com.esotericsoftware:kryo:5.4.0'
+}
