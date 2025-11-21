@@ -15,7 +15,8 @@ public enum FormulaError
 	REF(4, "#REF!", org.apache.poi.ss.usermodel.FormulaError.REF.getCode()),
 	NAME(5, "#NAME?", org.apache.poi.ss.usermodel.FormulaError.NAME.getCode()),
 	NUM(6, "#NUM!", org.apache.poi.ss.usermodel.FormulaError.NUM.getCode()),
-	NA(7, "#N/A", org.apache.poi.ss.usermodel.FormulaError.NA.getCode()), SPILL(9, "#SPILL!", 0), CALC(14, "#CALC!", 0);
+	NA(7, "#N/A", org.apache.poi.ss.usermodel.FormulaError.NA.getCode()), SPILL(9, "#SPILL!", 0), CALC(14, "#CALC!", 0),
+	NOT_IMPLEMENTED(15, "#N/I", 0);
 
 	private final int code;
 	private final int poiErrorCode;
