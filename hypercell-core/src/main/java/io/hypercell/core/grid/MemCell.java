@@ -597,10 +597,29 @@ public class MemCell implements io.hypercell.api.CellValue {
             {
                 id.setSheet(memSheet);
             }
-            SpillArea spillArea = (SpillArea) compile.getExpression().possibleSpillRange();
-            if (spillArea != null)
+
+            // Check if expression compiled successfully before accessing it
+            io.hypercell.api.Expression expr = compile.getExpression();
+            if (expr != null)
             {
-                memSheet.getSpillAreaCache().put(this, spillArea);
+                SpillArea spillArea = (SpillArea) expr.possibleSpillRange();
+                if (spillArea != null)
+                {
+                    memSheet.getSpillAreaCache().put(this, spillArea);
+                }
+            }
+            else
+            {
+                // Expression compilation failed - log as parse error
+                if (memSheet == null || memSheet.incrementAndGetNumParseErrors() < 5)
+                {
+                    String parseError = "Unable to compile expression:" + formula;
+                    if (memSheet != null)
+                    {
+                        memSheet.addParseError(parseError);
+                    }
+                    logger.error(parseError);
+                }
             }
         }
     }
