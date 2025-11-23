@@ -48,3 +48,11 @@ This allows you to inject:
 *   **Database Lookups**: A custom function that queries SQL.
 *   **API Calls**: A function that hits a REST endpoint.
 *   **Machine Learning**: A function that runs an inference model.
+
+## 6. Legacy Engine Integration (The "Bridge")
+
+To preserve the stability of the original Scoop calculation logic, HyperCell employs a **Hybrid Architecture**:
+
+*   **Modern Core (`io.hypercell.*`)**: Contains the clean, refactored grid infrastructure (`MemWorkbook`, `MemCell`) and API interfaces.
+*   **Legacy Engine (`scoop.expression.*`)**: Contains the original, battle-tested function implementations (`SUM`, `IF`, `VLOOKUP`, etc.) copied verbatim from the Scoop project.
+*   **The Bridge**: A set of adapter classes and wiring in `Compile.java` allows the Modern Core to drive the Legacy Engine. This ensures 100% compatibility with existing Excel models while allowing the core infrastructure to evolve.
