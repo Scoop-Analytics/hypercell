@@ -175,7 +175,9 @@ public class MemCell implements io.hypercell.api.CellValue {
                 MemCell value = null;
                 try
                 {
-                    value = (MemCell) compile.getExpression().evaluate();
+                    if (compile != null && compile.getExpression() != null) {
+                        value = (MemCell) compile.getExpression().evaluate();
+                    }
                 } catch (Exception calcException)
                 {
                     logger.error("Error calculating MemCell with formula {}", formulaValue, calcException);

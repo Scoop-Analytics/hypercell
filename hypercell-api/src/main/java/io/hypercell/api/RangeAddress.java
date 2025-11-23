@@ -41,7 +41,7 @@ public class RangeAddress
         return start != null ? start.row : 0;
     }
     public int getLastRowNumber(WorkbookDimensions wb) {
-        if (end != null && end.row >= 0) return end.row;
+        if (end != null && !end.isNoRow()) return end.row;
         return wb.getNumRows() - 1;
     }
     public int getFirstColumnNumber(WorkbookDimensions wb) {

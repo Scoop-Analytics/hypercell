@@ -95,7 +95,7 @@ public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
 
     public scoop.datatable.ColumnMetadata[] getColumnMetadata() { return null; }
 
-    public MemWorkbook() {}
+        public MemWorkbook() {}
 
     public MemWorkbook(MemWorkbook mw)
     {
