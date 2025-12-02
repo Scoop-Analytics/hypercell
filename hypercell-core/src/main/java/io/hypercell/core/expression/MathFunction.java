@@ -7,7 +7,7 @@ import io.hypercell.formula.HyperCellExpressionLexer;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import org.antlr.v4.runtime.tree.ParseTree;
-import scoop.datatable.AggregationRule;
+import io.hypercell.core.datatable.AggregationRule;
 import scoop.worksheet.CalculatedSourceWorkbook;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;

@@ -7,8 +7,8 @@ import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import scoop.datagrid.ExcelDataGrid;
-import scoop.dateparser.DateAnalyzer;
+import io.hypercell.core.datagrid.ExcelDataGrid;
+import io.hypercell.core.dateparser.DateAnalyzer;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 

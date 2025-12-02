@@ -6,7 +6,7 @@ import io.hypercell.formula.HyperCellExpressionParser;
 import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import scoop.dateparser.DateAnalyzer;
+import io.hypercell.core.dateparser.DateAnalyzer;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;

@@ -19,9 +19,9 @@ import org.apache.poi.ss.format.CellFormat;
 import org.apache.poi.ss.format.CellFormatResult;
 
 import org.checkerframework.checker.regex.qual.Regex;
-import scoop.datagrid.ExcelDataGrid;
-import scoop.datatable.CellType;
-import scoop.datatable.TableCell;
+import io.hypercell.core.datagrid.ExcelDataGrid;
+import io.hypercell.core.datatable.CellType;
+import io.hypercell.core.datatable.TableCell;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;

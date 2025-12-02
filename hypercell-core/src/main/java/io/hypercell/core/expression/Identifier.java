@@ -3,7 +3,7 @@ import io.hypercell.formula.HyperCellExpressionParser;
 import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import scoop.datatable.AggregationRule;
+import io.hypercell.core.datatable.AggregationRule;
 import io.hypercell.formula.HyperCellExpressionParser.ItemContext;
 import io.hypercell.formula.HyperCellExpressionParser.OffsetContext;
 import scoop.metric.DataSetValue;

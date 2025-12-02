@@ -1,5 +1,5 @@
 package scoop.processanalysis;
-import scoop.datatable.TimeSeriesPeriod;
+import io.hypercell.core.datatable.TimeSeriesPeriod;
 import scoop.metric.CalendarType;
 
 public class ConversionAnalysisCache {

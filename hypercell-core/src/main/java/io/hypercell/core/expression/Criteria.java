@@ -2,7 +2,7 @@ package io.hypercell.core.expression;
 import io.hypercell.formula.HyperCellExpressionParser;
 import io.hypercell.formula.HyperCellExpressionLexer;
 
-import scoop.dateparser.DateAnalyzer;
+import io.hypercell.core.dateparser.DateAnalyzer;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.MemCell;
 import io.hypercell.core.grid.MemSheet;

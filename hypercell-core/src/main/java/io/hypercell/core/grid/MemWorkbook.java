@@ -103,7 +103,7 @@ public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
         calculate();
     }
 
-    public scoop.datatable.ColumnMetadata[] getColumnMetadata() { return null; }
+    public io.hypercell.core.datatable.ColumnMetadata[] getColumnMetadata() { return null; }
 
         public MemWorkbook() {}
 
