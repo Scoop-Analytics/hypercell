@@ -1,4 +1,6 @@
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -6,9 +8,9 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import io.hypercell.core.grid.MemCell;
 
-public class UnaryOperator extends AbstractExpression
+public class UnaryOperator extends ScoopExpression
 {
-    public io.hypercell.api.Expression exp;
+    public ScoopExpression exp;
     private boolean isMinus;
 
     public UnaryOperator(ParseTree op, ParseTree tree, CompileContext cc)
@@ -27,9 +29,9 @@ public class UnaryOperator extends AbstractExpression
     }
 
     @Override
-    public io.hypercell.api.CellValue evaluate()
+    public MemCell calculateCellValue()
     {
-        MemCell result = (MemCell) exp.evaluate();
+        MemCell result = exp.calculateCellValue();
         if (isMinus)
         {
             if (result.getNumberValue() != null)

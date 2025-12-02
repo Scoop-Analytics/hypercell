@@ -2,8 +2,8 @@ package io.hypercell.core.expression;
 
 public class SpillArea
 {
-    public int width;
-    public int height;
+    public int height = 0;
+    public int width = 0;
 
     public static SpillArea getLargestSpillArea(SpillArea a, SpillArea b)
     {

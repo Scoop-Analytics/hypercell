@@ -2,6 +2,8 @@
  *
  */
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -12,11 +14,11 @@ import io.hypercell.core.grid.MemCell;
 /**
  * @author bradpeters
  */
-public class BinaryOperator extends AbstractExpression
+public class BinaryOperator extends ScoopExpression
 {
     public String op;
-    public io.hypercell.api.Expression left;
-    public io.hypercell.api.Expression right;
+    public ScoopExpression left;
+    public ScoopExpression right;
 
     public BinaryOperator(ParseTree ltree, ParseTree optree, ParseTree rtree, CompileContext cc)
     {
@@ -34,10 +36,10 @@ public class BinaryOperator extends AbstractExpression
     }
 
     @Override
-    public io.hypercell.api.CellValue evaluate()
+    public MemCell calculateCellValue()
     {
-        MemCell leftmc = (MemCell) left.evaluate();
-        MemCell rightmc = (MemCell) right.evaluate();
+        MemCell leftmc = left.calculateCellValue();
+        MemCell rightmc = right.calculateCellValue();
         if (leftmc != null && leftmc.getErrorValue() != null)
         {
             return leftmc;
@@ -81,8 +83,8 @@ public class BinaryOperator extends AbstractExpression
             }
         } else if (op.equals("&"))
         {
-            String s1 = FunctionUtils.getStringValue(leftmc, true);
-            String s2 = FunctionUtils.getStringValue(rightmc, true);
+            String s1 = Function.getStringValue(leftmc, true);
+            String s2 = Function.getStringValue(rightmc, true);
             return new MemCell(s1 + s2);
         }
         if (leftmc == null)

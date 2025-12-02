@@ -2,6 +2,8 @@
  *
  */
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -9,7 +11,7 @@ import java.text.ParseException;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-
+import scoop.ScoopException;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 
@@ -17,14 +19,14 @@ import io.hypercell.core.grid.MemCell;
  * @author bradpeters
  *
  */
-public class SheetNumber extends AbstractExpression
+public class SheetNumber extends ScoopExpression
 {
     private boolean invalid = false;
     private Integer intValue;
     private Long longValue;
     private Double doubleValue;
 
-    public SheetNumber(ParseTree tree) 
+    public SheetNumber(ParseTree tree) throws ScoopException
     {
         String text = tree.getChild(0).getText();
         try
@@ -50,7 +52,7 @@ public class SheetNumber extends AbstractExpression
         } catch (ParseException e)
         {
             invalid = true;
-            // throw new RuntimeException("Unable to parse number: " + text);
+            throw new ScoopException("Unable to parse number: " + text);
         }
     }
 
@@ -60,7 +62,7 @@ public class SheetNumber extends AbstractExpression
     }
 
     @Override
-    public io.hypercell.api.CellValue evaluate()
+    public MemCell calculateCellValue()
     {
         if (intValue != null)
             return new MemCell(intValue);

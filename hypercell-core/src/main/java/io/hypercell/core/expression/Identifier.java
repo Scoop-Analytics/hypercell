@@ -1,23 +1,28 @@
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import scoop.datatable.AggregationRule;
 import io.hypercell.formula.HyperCellExpressionParser.ItemContext;
 import io.hypercell.formula.HyperCellExpressionParser.OffsetContext;
+import scoop.metric.DataSetValue;
 import io.hypercell.api.CellAddress;
-import io.hypercell.api.CellValue;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 import io.hypercell.core.grid.MemSheet;
 import io.hypercell.core.grid.MemWorkbook;
 
-public class Identifier extends AbstractExpression
+public class Identifier extends ScoopExpression
 {
     private String name;
     private CellAddress address;
     private int offset;
+    private DataSetValue dataSetValue;
     private MemSheet parentSheet;
     private Double nullValue;
     private boolean isTableCount;
+    private AggregationRule aggregationRule;
 
     public Identifier(String name)
     {
@@ -63,7 +68,7 @@ public class Identifier extends AbstractExpression
     }
 
     @Override
-    public CellValue evaluate()
+    public MemCell calculateCellValue()
     {
         if (parentSheet != null)
         {
@@ -78,13 +83,52 @@ public class Identifier extends AbstractExpression
             }
             mc.calculate();
             return mc;
+        } else
+        {
+            if (dataSetValue == null)
+            {
+                if (nullValue != null)
+                {
+                    return new MemCell(nullValue);
+                }
+                return new MemCell(FormulaError.NA);
+            }
+            if (offset != 0)
+            {
+                if (dataSetValue.row - offset < 0)
+                {
+                    return new MemCell(0.0);
+                } else
+                {
+                    return new MemCell(
+                            dataSetValue.dataSet.getDoubleValue(dataSetValue.row - offset, dataSetValue.column));
+                }
+            } else
+            {
+                if (dataSetValue.dataSet == null)
+                {
+                    return new MemCell(dataSetValue.value);
+                }
+                Object value = dataSetValue.dataSet.getValue(dataSetValue.row, dataSetValue.column);
+                if (value instanceof String stringValue)
+                {
+                    return new MemCell(stringValue);
+                } else if (value instanceof Number numberValue)
+                {
+                    return new MemCell(numberValue);
+                } else if (value instanceof Boolean boolValue)
+                {
+                    return new MemCell(boolValue);
+                }
+                return new MemCell(FormulaError.NA);
+            }
         }
-        return null;
     }
 
     @Override
     public String getExcelFormula()
     {
+        char letterCol = 'A';
         if (address == null)
         {
             return "@NA";
@@ -94,15 +138,27 @@ public class Identifier extends AbstractExpression
 
     private String getSheetColumn(int colNumber)
     {
+        // Use the same correct algorithm as CellAddress.colCharacters()
+        // Excel columns are 1-based: A=0, B=1, ..., Z=25, AA=26, AB=27, etc.
         StringBuilder sb = new StringBuilder();
         int curValue = colNumber;
         do
         {
             int c = curValue % 26;
             sb.insert(0, (char) ((int) 'A' + c));
-            curValue = (curValue / 26) - 1;
+            curValue = (curValue / 26) - 1;  // Subtract 1 to handle 1-based Excel columns
         } while (curValue >= 0);
         return sb.toString();
+    }
+
+    @Override
+    public String getMetricFormula()
+    {
+        if (offset != 0)
+        {
+            return "OFFSET('" + name + "'," + offset + ")";
+        }
+        return "'" + name + "'";
     }
 
     public String getName()
@@ -113,6 +169,16 @@ public class Identifier extends AbstractExpression
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public DataSetValue getValue()
+    {
+        return dataSetValue;
+    }
+
+    public void setValue(DataSetValue value)
+    {
+        this.dataSetValue = value;
     }
 
     @Override
@@ -184,6 +250,36 @@ public class Identifier extends AbstractExpression
         this.parentSheet = sheet;
     }
 
+    public MemCell calculateCellValue(int rowOffset, int columnOffset)
+    {
+        if (parentSheet == null)
+        {
+            return null;
+        }
+        if (address.sheetName != null && !parentSheet.getName().equals(address.sheetName))
+        {
+            return parentSheet.getCellAt(address.sheetName, address.row + rowOffset, address.column + columnOffset);
+        } else
+        {
+            return parentSheet.getCellAt(address.row + rowOffset, address.column + columnOffset);
+        }
+    }
+
+    public MemCell calculateCellValue(MemSheet memSheet, int rowOffset, int columnOffset)
+    {
+        if (memSheet == null)
+        {
+            return null;
+        }
+        if (address.sheetName != null && !memSheet.getName().equals(address.sheetName))
+        {
+            return memSheet.getCellAt(address.sheetName, address.row + rowOffset, address.column + columnOffset);
+        } else
+        {
+            return memSheet.getCellAt(address.row + rowOffset, address.column + columnOffset);
+        }
+    }
+
     public String getSheetName()
     {
         return address.sheetName;
@@ -202,5 +298,15 @@ public class Identifier extends AbstractExpression
     public boolean isTableCount()
     {
         return isTableCount;
+    }
+
+    public AggregationRule getAggregationRule()
+    {
+        return aggregationRule;
+    }
+
+    public void setAggregationRule(AggregationRule aggregationRule)
+    {
+        this.aggregationRule = aggregationRule;
     }
 }

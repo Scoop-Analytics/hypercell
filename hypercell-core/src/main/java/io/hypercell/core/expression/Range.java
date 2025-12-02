@@ -2,6 +2,8 @@
  *
  */
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +24,14 @@ import io.hypercell.core.grid.MemSheet;
 /**
  * @author bradpeters
  */
-public class Range extends AbstractExpression
+public class Range extends ScoopExpression
 {
     private MemSheet sheet;
     private Identifier startAddress;
     private Identifier endAddress;
     private RangeAddress tableArray;
     private boolean isOffset = false;
-    private io.hypercell.api.Expression filter;
+    private ScoopExpression filter;
 
     public Range(Identifier startAddress, Identifier endAddress)
     {
@@ -236,6 +238,7 @@ public class Range extends AbstractExpression
         return new CellAddress(row + rp.startRow, col + rp.startCol);
     }
 
+    @Override
     public String getMetricFormula()
     {
         if (tableArray != null)
@@ -247,6 +250,7 @@ public class Range extends AbstractExpression
         return startAddress.getMetricFormula() + ":" + endAddress.getMetricFormula();
     }
 
+    @Override
     public String getExcelFormula()
     {
         if (tableArray != null)
@@ -258,14 +262,18 @@ public class Range extends AbstractExpression
         return startAddress.getExcelFormula() + ":" + endAddress.getExcelFormula();
     }
 
+    @Override
+    public MemCell calculateCellValue()
+    {
+        return null;
+    }
 
-
-    public io.hypercell.api.Expression getFilter()
+    public ScoopExpression getFilter()
     {
         return filter;
     }
 
-    public void setFilter(io.hypercell.api.Expression filter)
+    public void setFilter(ScoopExpression filter)
     {
         this.filter = filter;
     }
@@ -297,10 +305,4 @@ public class Range extends AbstractExpression
         }
         return "invalid range";
     }
-
-    @Override
-    public io.hypercell.api.CellValue evaluate() {
-        return null; // TODO: Return array of values or implement properly
-    }
-
 }

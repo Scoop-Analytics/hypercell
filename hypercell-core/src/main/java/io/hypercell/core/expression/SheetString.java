@@ -2,6 +2,8 @@
  * 
  */
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -11,7 +13,7 @@ import io.hypercell.core.grid.MemCell;
  * @author bradpeters
  *
  */
-public class SheetString extends AbstractExpression
+public class SheetString extends ScoopExpression
 {
 	private String value;
 
@@ -38,7 +40,7 @@ public class SheetString extends AbstractExpression
 	}
 
 	@Override
-	public io.hypercell.api.CellValue evaluate()
+	public MemCell calculateCellValue()
 	{
 		return new MemCell(value);
 	}

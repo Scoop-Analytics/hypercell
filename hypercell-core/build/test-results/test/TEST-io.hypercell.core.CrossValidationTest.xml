@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.hypercell.core.CrossValidationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-23T04:17:49" hostname="brad-EVO-X2" time="30.01">
+<testsuite name="io.hypercell.core.CrossValidationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-12-02T08:11:41" hostname="brad-EVO-X2" time="26.491">
   <properties/>
-  <testcase name="testHyperCellMatchesScoopCalculations()" classname="io.hypercell.core.CrossValidationTest" time="30.01"/>
+  <testcase name="testHyperCellMatchesScoopCalculations()" classname="io.hypercell.core.CrossValidationTest" time="26.491"/>
   <system-out><![CDATA[
 === Testing: lboval.xlsx ===
   ✅ Sheets: 1
@@ -75,8 +75,8 @@ Mismatches found:     0
 SLF4J: No SLF4J providers were found.
 SLF4J: Defaulting to no-operation (NOP) logger implementation
 SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
-Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/lboval.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/desjardan.xlsx
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/lboval.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Box IPO Financial Model.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/TestSheet.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Position2 - EMP Sept.xlsx

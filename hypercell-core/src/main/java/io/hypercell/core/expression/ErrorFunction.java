@@ -1,14 +1,11 @@
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
-import io.hypercell.api.CellValue;
-import io.hypercell.api.Expression;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 
-/**
- * Represents error values in expressions (e.g., #N/A, #VALUE!, #REF!)
- */
-public class ErrorFunction implements Expression
+public class ErrorFunction extends ScoopExpression
 {
     FormulaError formulaError;
 
@@ -18,7 +15,7 @@ public class ErrorFunction implements Expression
     }
 
     @Override
-    public CellValue evaluate()
+    public MemCell calculateCellValue()
     {
         return new MemCell(formulaError);
     }
@@ -29,9 +26,4 @@ public class ErrorFunction implements Expression
         return formulaError.getDisplay();
     }
 
-    @Override
-    public String getMetricFormula()
-    {
-        return formulaError.getDisplay();
-    }
 }

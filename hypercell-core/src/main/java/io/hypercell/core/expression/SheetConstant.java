@@ -2,10 +2,12 @@
  *
  */
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-
+import scoop.ScoopException;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 
@@ -16,7 +18,7 @@ import java.text.ParseException;
  * @author bradpeters
  *
  */
-public class SheetConstant extends AbstractExpression
+public class SheetConstant extends ScoopExpression
 {
     private boolean isNA = false;
 
@@ -31,7 +33,7 @@ public class SheetConstant extends AbstractExpression
     }
 
     @Override
-    public io.hypercell.api.CellValue evaluate()
+    public MemCell calculateCellValue()
     {
         if (isNA)
         {

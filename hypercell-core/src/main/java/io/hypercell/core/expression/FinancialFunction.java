@@ -1,7 +1,9 @@
 /**
- * Financial functions for Excel compatibility (IRR, NPV, etc.)
+ *
  */
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import java.util.List;
 
@@ -9,52 +11,58 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.poi.ss.formula.functions.Irr;
 
 import io.hypercell.api.CellAddress;
-import io.hypercell.api.CellValue;
-import io.hypercell.api.FunctionRegistry;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 /**
  * @author bradpeters
+ *
  */
-public class FinancialFunction extends BaseFunctionExpression
+public class FinancialFunction extends Function
 {
-    public FinancialFunction(ParseTree tree, CompileContext cc, FunctionRegistry registry)
+    public FinancialFunction(ParseTree tree, CompileContext cc)
     {
-        super(tree, cc, registry);
+        super(tree, cc);
     }
 
     @Override
-    public CellValue evaluate()
+    public MemCell calculateCellValue()
     {
+        if (memCellCalculationCache != null)
+        {
+            var cacheValue = memCellCalculationCache.getValue();
+            if (cacheValue != null)
+            {
+                return cacheValue;
+            }
+        }
         if (type == HyperCellExpressionLexer.IRRTOKEN)
         {
             double[] values = getValues((Range) expressions.get(0));
             if (expressions.size() > 1)
             {
-                Number n = ((MemCell)expressions.get(1).evaluate()).getNumberValue();
+                Number n = expressions.get(1).calculateCellValue().getNumberValue();
                 if (n == null)
                 {
-                    return new MemCell(Irr.irr(values));
+                    return getReturn(new MemCell(Irr.irr(values)));
                 }
-                return new MemCell(Irr.irr(values, n.doubleValue()));
+                return getReturn(new MemCell(Irr.irr(values, n.doubleValue())));
             } else
             {
-                return new MemCell(Irr.irr(values));
+                return getReturn(new MemCell(Irr.irr(values)));
             }
         } else if (type == HyperCellExpressionLexer.NPVTOKEN)
         {
             double[] values = getValues((Range) expressions.get(1));
-            MemCell mc = (MemCell)expressions.get(0).evaluate();
+            MemCell mc = expressions.get(0).calculateCellValue();
             if (mc == null)
             {
-                return new MemCell(FormulaError.VALUE);
+                return getReturn(new MemCell(FormulaError.VALUE));
             }
             Number n = mc.getNumberValue();
             if (n == null)
             {
-                return new MemCell(FormulaError.VALUE);
+                return getReturn(new MemCell(FormulaError.VALUE));
             }
             double irr = n.doubleValue();
             double result = 0;
@@ -62,7 +70,7 @@ public class FinancialFunction extends BaseFunctionExpression
             {
                 result += values[i] / Math.pow(1 + irr, i + 1);
             }
-            return new MemCell(result);
+            return getReturn(new MemCell(result));
         }
         return null;
     }
@@ -82,4 +90,14 @@ public class FinancialFunction extends BaseFunctionExpression
         }
         return values;
     }
+
+    private MemCell getReturn(MemCell result)
+    {
+        if (memCellCalculationCache != null)
+        {
+            memCellCalculationCache.cacheValue(result);
+        }
+        return result;
+    }
+
 }

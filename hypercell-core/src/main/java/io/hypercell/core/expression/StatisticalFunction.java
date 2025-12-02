@@ -1,33 +1,41 @@
 /**
- * Statistical functions for Excel compatibility (NORMDIST, NORMSDIST, etc.)
+ *
  */
 package io.hypercell.core.expression;
+import io.hypercell.formula.HyperCellExpressionParser;
+import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-import io.hypercell.api.CellValue;
-import io.hypercell.api.FunctionRegistry;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
-import io.hypercell.formula.HyperCellExpressionParser;
 
 /**
  * @author bradpeters
+ *
  */
-public class StatisticalFunction extends BaseFunctionExpression
+public class StatisticalFunction extends Function
 {
-    public StatisticalFunction(ParseTree tree, CompileContext cc, FunctionRegistry registry)
+    public StatisticalFunction(ParseTree tree, CompileContext cc)
     {
-        super(tree, cc, registry);
+        super(tree, cc);
     }
 
     @Override
-    public CellValue evaluate()
+    public MemCell calculateCellValue()
     {
+        if (memCellCalculationCache != null)
+        {
+            var cacheValue = memCellCalculationCache.getValue();
+            if (cacheValue != null)
+            {
+                return cacheValue;
+            }
+        }
         if (type == HyperCellExpressionParser.NORMDISTTOKEN)
         {
-            MemCell xmc = (MemCell)expressions.getFirst().evaluate();
+            MemCell xmc = expressions.getFirst().calculateCellValue();
             Number xn = xmc.getNumberValue();
             Number mn = null;
             Number stdn = null;
@@ -39,30 +47,40 @@ public class StatisticalFunction extends BaseFunctionExpression
                 cn = 0;
             } else
             {
-                MemCell mean = (MemCell)expressions.get(1).evaluate();
+                MemCell mean = expressions.get(1).calculateCellValue();
                 mn = mean.getNumberValue();
-                MemCell stddev = (MemCell)expressions.get(2).evaluate();
+                MemCell stddev = expressions.get(2).calculateCellValue();
                 stdn = stddev.getNumberValue();
-                MemCell cumulative = (MemCell)expressions.get(3).evaluate();
+                MemCell cumulative = expressions.get(3).calculateCellValue();
                 cn = cumulative.getNumberValue();
                 if (xn == null || mn == null || stdn == null || cn == null)
-                    return new MemCell(FormulaError.VALUE);
+                    return getReturn(new MemCell(FormulaError.VALUE));
             }
             NormalDistribution nd = new NormalDistribution(mn.doubleValue(), stdn.doubleValue());
             if (cn.doubleValue() > 0)
             {
-                return new MemCell(nd.cumulativeProbability(xn.doubleValue()));
+                return getReturn(new MemCell(nd.cumulativeProbability(xn.doubleValue())));
             } else
             {
-                return new MemCell(nd.density(xn.doubleValue()));
+                return getReturn(new MemCell(nd.density(xn.doubleValue())));
             }
         } else if (type == HyperCellExpressionParser.NORMSDISTTOKEN)
         {
-            MemCell xmc = (MemCell)expressions.get(0).evaluate();
+            MemCell xmc = expressions.get(0).calculateCellValue();
             Number xn = xmc.getNumberValue();
             NormalDistribution nd = new NormalDistribution(0, 1);
-            return new MemCell(nd.cumulativeProbability(xn.doubleValue()));
+            return getReturn(new MemCell(nd.cumulativeProbability(xn.doubleValue())));
         }
         return null;
     }
+
+    private MemCell getReturn(MemCell result)
+    {
+        if (memCellCalculationCache != null)
+        {
+            memCellCalculationCache.cacheValue(result);
+        }
+        return result;
+    }
+
 }

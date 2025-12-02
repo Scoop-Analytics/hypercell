@@ -1,6 +1,6 @@
 package scoop.worksheet;
 
-import scoop.expression.Identifier;
+import io.hypercell.core.expression.Identifier;
 import io.hypercell.core.grid.MemCell;
 
 import java.util.HashMap;
