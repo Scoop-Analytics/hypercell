@@ -1,4 +1,4 @@
-package scoop.workspace;
+package io.hypercell.core.workspace;
 
 public class Workspace {
     public String workspaceID;

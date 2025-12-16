@@ -1,10 +1,10 @@
-package scoop.metadata;
+package io.hypercell.core.metadata;
 
 import java.util.List;
 
 public class ScoopMetadata {
     public Object loadMetadataObject(Class<?> clazz, String id) { return null; }
-    public scoop.user.User getUserFromID(String id) { return null; }
+    public io.hypercell.core.user.User getUserFromID(String id) { return null; }
     public List<ScoopMetadataObject> queryForObjects(Class<?> clazz, String field, String value) { return new java.util.ArrayList<>(); }
     public List<ScoopMetadataObject> queryForObjects(Class<?> clazz, String query) { return new java.util.ArrayList<>(); }
     public List<ScoopMetadataObject> queryForObjects(Class<?> clazz, String field, String value, Class<?> clazz2) { return new java.util.ArrayList<>(); }

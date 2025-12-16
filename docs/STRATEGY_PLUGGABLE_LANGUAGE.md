@@ -1,6 +1,6 @@
 # Strategy: Pluggable Language Architecture (Option 2)
 
-**Status:** PROPOSED
+**Status:** IMPLEMENTED (December 2, 2025)
 **Goal:** Enable consumers (like Scoop) to extend the HyperCell language definition (`.g4`) while reusing the core grid infrastructure. This supports strict syntax validation and custom language constructs.
 
 ---

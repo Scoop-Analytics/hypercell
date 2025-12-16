@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.hypercell.core.datagrid.ExcelDataGrid;
+import io.hypercell.core.util.FormattingUtils;
 import io.hypercell.formula.HyperCellExpressionParser.SumproductargumentsContext;
 import io.hypercell.core.grid.MemCell;
 import io.hypercell.core.grid.MemCellContext;
@@ -87,7 +87,7 @@ public class Function extends ScoopExpression
                     String formatString = context != null && context.getStyle() != null ? context.getStyle()
                                                                                                  .getFormatString() : null;
                     String numberFormat = "####";
-                    if (ExcelDataGrid.isDateFormat(formatString))
+                    if (FormattingUtils.isDateFormat(formatString))
                     {
                         /*
                          * in Excel, Google Sheets and Libre, when a date is turned into a string, if it's in a formula

@@ -4,7 +4,7 @@ import io.hypercell.core.grid.MemCell;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import io.hypercell.core.grid.MemCellContext;
-import io.hypercell.core.grid.FormattingUtils;
+import io.hypercell.core.util.FormattingUtils;
 
 public class FunctionUtils {
     public static String getStringValue(MemCell cell, boolean inConcant) {

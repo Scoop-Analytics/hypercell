@@ -1,6 +1,6 @@
 package scoop.ingest;
 
-public class ReportInbox extends scoop.metadata.ScoopMetadataObject {
+public class ReportInbox extends io.hypercell.core.metadata.ScoopMetadataObject {
     public String inboxID;
     public String workspaceID;
     public String forwardToInbox;

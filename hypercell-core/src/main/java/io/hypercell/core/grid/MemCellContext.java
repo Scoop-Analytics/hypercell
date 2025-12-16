@@ -16,9 +16,12 @@ public class MemCellContext
     private boolean isDate;
     
     private String elementID;
+    private Object userObject;
 
     private Map<String, String> properties;
 
+    public Object getUserObject() { return userObject; }
+    public void setUserObject(Object userObject) { this.userObject = userObject; }
     public MemCellContext()
     {
 

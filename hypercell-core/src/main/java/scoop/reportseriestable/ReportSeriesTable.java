@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import scoop.ingest.ReportInbox;
 
-public class ReportSeriesTable extends scoop.metadata.ScoopMetadataObject {
+public class ReportSeriesTable extends io.hypercell.core.metadata.ScoopMetadataObject {
     public static String timestampFormat = "yyyy-MM-dd HH:mm:ss";
     public String getTableName() { return ""; }
     public boolean isDepracated() { return false; }

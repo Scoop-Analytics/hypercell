@@ -14,7 +14,7 @@ import io.hypercell.core.expression.Identifier;
 import io.hypercell.core.expression.Range;
 import io.hypercell.core.expression.SpillArea;
 import io.hypercell.formula.HyperCellExpressionParser.ExpressionContext;
-import io.hypercell.api.CellAddress;
+import io.hypercell.core.util.FormattingUtils;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -566,10 +566,6 @@ public class MemCell implements io.hypercell.api.CellValue {
                 result.add(idAddress);
         }
         return result;
-    }
-
-    public void compileFormula(scoop.ScoopContext sc, MemSheet memSheet) {
-        compileFormula(memSheet);
     }
 
     public void compileFormula(MemSheet memSheet)

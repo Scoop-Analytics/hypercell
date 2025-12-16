@@ -19,7 +19,7 @@ import org.apache.poi.ss.format.CellFormat;
 import org.apache.poi.ss.format.CellFormatResult;
 
 import org.checkerframework.checker.regex.qual.Regex;
-import io.hypercell.core.datagrid.ExcelDataGrid;
+import io.hypercell.core.util.FormattingUtils;
 import io.hypercell.core.datatable.CellType;
 import io.hypercell.core.datatable.TableCell;
 import io.hypercell.api.CellAddress;
@@ -515,12 +515,12 @@ public class TextualFunction extends Function
     public static String formatValueUsingSheetFormatString(String fmt, Number numberValue)
     {
         String s = null;
-        if (ExcelDataGrid.isExcelDateFormat(fmt))
+        if (FormattingUtils.isExcelDateFormat(fmt))
         {
             ZonedDateTime zdt = DateTimeFunction.getDateFromSheetNumber(
                     numberValue.doubleValue());
             String jfmt = DateTimeFunction.getJavaDateFormatFromSheetFormat(
-                    ExcelDataGrid.removeBadDateFormatCharacters(fmt.toLowerCase()));
+                    FormattingUtils.removeBadDateFormatCharacters(fmt.toLowerCase()));
             SimpleDateFormat sdf = new SimpleDateFormat(jfmt);
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             s = sdf.format(Date.from(zdt.toInstant()));

@@ -71,7 +71,7 @@ public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
         this.registry = registry;
     }
 
-    public MemWorkbook(scoop.ScoopContext sc, String name, org.apache.poi.ss.usermodel.Workbook wb, boolean b) {
+    public MemWorkbook(io.hypercell.api.EvaluationContext context, String name, org.apache.poi.ss.usermodel.Workbook wb, boolean b) {
         this.name = name;
         this.registry = new io.hypercell.api.FunctionRegistry() {
             public void register(String name, io.hypercell.api.Function function) {}
@@ -99,7 +99,7 @@ public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
         return cell != null ? cell.getValue() : null;
     }
 
-    public void calculate(scoop.ScoopContext sc) {
+    public void calculate(io.hypercell.api.EvaluationContext context) {
         calculate();
     }
 
@@ -596,6 +596,8 @@ public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
             sheets.get(i).saveSheet(xssfSheet, styleMap);
         }
     }
+
+    public Workbook getWorkbook() { return workbook; }
 
 public void setWorkbook(Workbook workbook)
     {

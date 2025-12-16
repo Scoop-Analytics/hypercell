@@ -7,7 +7,7 @@ import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import io.hypercell.core.datagrid.ExcelDataGrid;
+import io.hypercell.core.util.FormattingUtils;
 import io.hypercell.core.dateparser.DateAnalyzer;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
@@ -101,7 +101,7 @@ public class InformationFunction extends Function
                 }
                 return getReturn(new MemCell(0));
             }
-            if (ExcelDataGrid.isExcelDateFormat(mc.getFormatString()))
+            if (FormattingUtils.isExcelDateFormat(mc.getFormatString()))
             {
                 return getReturn(new MemCell(1));
             }

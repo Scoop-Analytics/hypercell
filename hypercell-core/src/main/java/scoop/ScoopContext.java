@@ -2,13 +2,13 @@ package scoop;
 
 import scoop.connector.definition.ConnectorDefinition;
 import scoop.ingest.ReportInbox;
-import scoop.metadata.ScoopMetadata;
+import io.hypercell.core.metadata.ScoopMetadata;
 import scoop.metric.Metric;
 import scoop.reportseriestable.ReportSeriesTable;
-import scoop.user.Account;
-import scoop.user.User;
+import io.hypercell.core.user.Account;
+import io.hypercell.core.user.User;
 import scoop.worksheet.Worksheet;
-import scoop.workspace.Workspace;
+import io.hypercell.core.workspace.Workspace;
 
 import java.util.List;
 import java.util.Map;

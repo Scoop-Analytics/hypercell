@@ -12,7 +12,7 @@ import io.hypercell.api.FunctionRegistry;
 import io.hypercell.formula.HyperCellExpressionParser.SumproductargumentsContext;
 import io.hypercell.core.grid.MemCell;
 import io.hypercell.core.grid.MemCellContext;
-import io.hypercell.core.grid.FormattingUtils; // for getStringValue
+import io.hypercell.core.util.FormattingUtils; // for getStringValue
 import io.hypercell.formula.HyperCellExpressionParser; // For context classes
 
 import java.text.DecimalFormat;
