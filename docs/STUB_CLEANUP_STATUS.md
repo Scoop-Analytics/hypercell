@@ -13,8 +13,9 @@
 ### 2. Update `CompileContext`
 **Location:** `hypercell-core/src/main/java/io/hypercell/core/expression/CompileContext.java`
 **Action:**
-*   Add `EvaluationContext` field.
-*   Update constructor to accept it.
+*   Add `private final EvaluationContext evaluationContext;` field.
+*   Update constructor to accept `EvaluationContext`.
+*   Add `public EvaluationContext getEvaluationContext()` getter.
 
 ### 3. The Purge
 Once `MathFunction` is clean, the following directories can be deleted:
