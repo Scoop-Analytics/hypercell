@@ -115,11 +115,14 @@ Cross-validated against Excel with **82,881 formulas** across 9 workbooks:
 Workbooks tested:     9
 Total sheets:         64
 Formulas validated:   82881
+Formulas skipped:     12 (unsupported functions)
 Mismatches found:     0
 
-✅ SUCCESS: 100% Excel compatibility
+✅ SUCCESS: 100% of validated formulas match Excel
 ═══════════════════════════════════════════════════════════
 ```
+
+*12 formulas (0.014%) skipped due to unsupported functions.*
 
 ## Installation
 

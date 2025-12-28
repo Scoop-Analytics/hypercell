@@ -118,14 +118,16 @@ ExtendedWorkbook workbook = integration.createWorkbook(memWorkbook);
 workbook.setAutoRefreshQueries(true);
 workbook.calculate();
 
-// Get cell values with type-safe access
+// Get cell values
 Object value = workbook.getCellValue("Sheet1", 0, 0);
-String text = workbook.getCellStringValue("Results", 5, 2);
-Number number = workbook.getCellNumberValue("Data", 0, 0);
 
-// Set cell values
-workbook.setCellValue("Sheet1", 0, 0, 42.5);
-workbook.setCellValue("Sheet1", 0, 1, "Hello");
+// Cast to specific types as needed
+String text = (String) workbook.getCellValue("Results", 5, 2);
+Number number = (Number) workbook.getCellValue("Data", 0, 0);
+
+// Set cell values (last param: recalculate after setting)
+workbook.setCellValue("Sheet1", 0, 0, 42.5, false);
+workbook.setCellValue("Sheet1", 0, 1, "Hello", true);  // recalculate after this
 
 // Access underlying workbook
 MemWorkbook underlying = workbook.getWorkbook();

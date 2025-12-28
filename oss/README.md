@@ -44,8 +44,8 @@ import io.hypercell.core.grid.MemSheet;
 import io.hypercell.core.grid.MemCell;
 
 // Create a workbook programmatically
-MemWorkbook workbook = new MemWorkbook("MyWorkbook");
-MemSheet sheet = workbook.addSheet("Sheet1");
+MemWorkbook workbook = new MemWorkbook();
+MemSheet sheet = workbook.createSheet("Sheet1");
 
 // Set values using MemCell
 sheet.setCellAt(0, 0, new MemCell(100));  // A1 = 100
@@ -183,11 +183,15 @@ Cross-validated against Microsoft Excel:
 Workbooks tested:     9
 Total sheets:         64
 Formulas validated:   82881
+Formulas skipped:     12 (unsupported functions)
 Mismatches found:     0
 
-✅ SUCCESS: 100% Excel compatibility
+✅ SUCCESS: 100% of validated formulas match Excel
 ═══════════════════════════════════════════════════════════
 ```
+
+**Note**: 12 formulas (0.014%) were skipped due to unsupported functions or parse errors.
+All 82,881 validated formulas produce identical results to Excel.
 
 ## Architecture
 
@@ -213,8 +217,11 @@ Mismatches found:     0
 ### Custom Functions
 
 ```java
-// Register a custom function at the workbook level
-workbook.registerFunction("DOUBLE", (args, context) -> {
+import io.hypercell.api.FunctionRegistry;
+
+// Get the function registry and register a custom function
+FunctionRegistry registry = workbook.getRegistry();
+registry.register("DOUBLE", (args, context) -> {
     double value = args.get(0).getDoubleValue();
     return new MemCell(value * 2);
 });
@@ -239,8 +246,9 @@ public class MyContext implements EvaluationContext {
     }
 }
 
-// Apply context to workbook
-workbook.setEvaluationContext(myContext);
+// Calculate with custom context
+MyContext myContext = new MyContext();
+workbook.calculate(myContext);
 ```
 
 ## Performance

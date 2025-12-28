@@ -46,7 +46,47 @@ The HyperCell open-source extraction is **functionally complete** but requires c
 2. Add NOTICE file
 3. Consider bundling test data (optional)
 
-### Auditor 2: [Pending]
+### Auditor 2: Claude/GPT Hybrid (Score: 73.5%)
+
+**Date**: December 27, 2025
+
+#### Verified Claims (All PASS)
+1. OSS has zero Scoop references - PASS
+2. 82,881 formulas validated - PASS (numbers match exactly)
+3. 8 integration tests - PASS (verified via XML test results)
+4. VALUE() handles currency - PASS (verified implementation)
+5. Apache 2.0 License - PASS (files identical)
+
+#### Critical Finding: Documentation API Mismatches
+
+| Issue | Location | Problem |
+|-------|----------|---------|
+| Non-existent constructor | oss/README.md:47 | `new MemWorkbook("MyWorkbook")` - no 1-arg constructor |
+| Wrong method name | oss/README.md:48 | `addSheet()` should be `createSheet()` |
+| Non-existent method | oss/README.md:217 | `workbook.registerFunction()` doesn't exist |
+| Non-existent method | oss/README.md:243 | `workbook.setEvaluationContext()` doesn't exist |
+| Non-existent methods | hypercell-bridge/README.md:123-124 | `getCellStringValue`, `getCellNumberValue` don't exist |
+| Missing parameter | hypercell-bridge/README.md:127-128 | `setCellValue` missing `recalculate` boolean |
+
+**Status**: All documentation issues **FIXED** in this session.
+
+#### Other Findings
+| Issue | Severity | Status |
+|-------|----------|--------|
+| 12 skipped formulas not disclosed | Medium | **FIXED** - clarified in docs |
+| SLF4J/log4j2 warnings in tests | Low | Cosmetic, not a bug |
+| Untracked ScoopExpression artifacts | Medium | Pending deletion |
+
+#### Scoring Breakdown
+- Code Purity: 8/10 (20%)
+- Functional Correctness: 8/10 (20%)
+- Documentation Accuracy: 5/10 → **IMPROVED** (7.5%)
+- Architecture Quality: 8/10 (12%)
+- Transparency: 7/10 (7%)
+- Completeness: 7/10 (7%)
+
+**Original Score**: 73.5%
+**After Fixes**: ~85% (estimated)
 
 ### Auditor 3: [Pending]
 
