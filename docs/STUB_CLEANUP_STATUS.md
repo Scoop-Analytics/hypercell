@@ -1,29 +1,27 @@
 # Stub Cleanup Status
 *Tracking the removal of the `scoop.*` package from `hypercell-core`*
 
-## Remaining Tasks
+> **Status: COMPLETE** - All stub cleanup tasks have been finished. The `oss/` directory is clean.
 
-### 1. Refactor `MathFunction.java`
-**Location:** `hypercell-core/src/main/java/io/hypercell/core/expression/MathFunction.java`
-**Action:**
-*   Remove `populateIfNecessary(MemCell mc)` method.
-*   Replace usage of `CalculatedSourceWorkbook` with `cc.getEvaluationContext().refreshDataSource(...)`.
-*   Note: This requires `CompileContext` to hold the `EvaluationContext`.
+## Completed Tasks
 
-### 2. Update `CompileContext`
-**Location:** `hypercell-core/src/main/java/io/hypercell/core/expression/CompileContext.java`
-**Action:**
-*   Add `private final EvaluationContext evaluationContext;` field.
-*   Update constructor to accept `EvaluationContext`.
-*   Add `public EvaluationContext getEvaluationContext()` getter.
+### 1. ✅ Refactor `MathFunction.java`
+**Status:** Complete - Moved to `oss/hypercell-core/src/main/java/io/hypercell/core/expression/MathFunction.java`
+- Removed legacy `populateIfNecessary` method
+- Uses `EvaluationContext` for data source refresh
 
-### 3. The Purge
-Once `MathFunction` is clean, the following directories can be deleted:
-*   `hypercell-core/src/main/java/scoop/` (Recursive delete)
-*   **Target Files:** `ScoopContext`, `ScoopMetadata`, `Worksheet`, `CalculatedSourceWorkbook`, `InputQuery`.
+### 2. ✅ Update `CompileContext`
+**Status:** Complete - Updated to accept `EvaluationContext`
+- Added `EvaluationContext` field and getter
+- Constructor updated
 
-### 4. Grammar Cleanup
-**Location:** `hypercell-formula/src/main/antlr/io/hypercell/formula/HyperCellExpression.g4`
-**Action:**
-*   Remove `SCOOP` token definitions.
-*   Remove `SCOOP` specific parser rules.
+### 3. ✅ The Purge
+**Status:** Complete - All scoop references removed
+- Deleted root-level zombie directories (470 files, 35,291 lines)
+- `oss/` directory has zero Scoop references
+- Verified via `grep -r "scoop\|Scoop" oss/*/src/main --include="*.java"` → 0 matches
+
+### 4. ✅ Grammar Cleanup
+**Status:** Complete
+- `HyperCellExpression.g4` is clean in `oss/hypercell-formula`
+- No SCOOP-specific tokens or rules

@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `VALUE("$1,000")` now returns `1000` instead of `0`
   - Currency symbols are stripped before numeric parsing
 
+### Changed
+- Documentation API examples updated to match actual implementation
+- Clarified "100% compatibility" claim to note 12 skipped formulas (0.014%)
+
+### Removed
+- Legacy zombie directories (470 files, 35,291 lines of dead code)
+
 ## [0.1.0] - 2025-01-01
 
 ### Added

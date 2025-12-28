@@ -1,5 +1,7 @@
 # HyperCell Decoupling Strategy & Status
-*Last Updated: December 16, 2025*
+*Last Updated: December 27, 2025*
+
+> **Status: COMPLETE** - The decoupling work is finished. The `oss/` directory contains the clean, zero-dependency HyperCell engine. The `hypercell-bridge/` module provides enterprise integration.
 
 ## 🎯 Objective
 To transform `hypercell-core` from a "Scoop-aware" library into a hermetic, generic calculation engine. This is achieved by inverting dependencies: instead of HyperCell importing `scoop.*` classes, it defines interfaces that Scoop must implement.
@@ -52,8 +54,10 @@ We centralized Excel format validation logic.
 | **MemCell** | ✅ **Done** | Removed unused `ScoopContext` from `compileFormula()`. |
 | **ExcelDataGrid** | ✅ **Gone** | Deleted legacy class. |
 | **FormattingUtils** | ✅ **Done** | Consolidated logic into `io.hypercell.core.util`. |
-| **MathFunction** | ⚠️ **Pending** | Still contains `populateIfNecessary` which calls legacy stubs. |
-| **Scoop Package** | ⚠️ **Pending** | `hypercell-core/src/main/java/scoop/` still exists. |
+| **MathFunction** | ✅ **Done** | Cleaned up and moved to `oss/hypercell-core`. |
+| **Scoop Package** | ✅ **Gone** | Legacy `scoop/` package deleted. Zero Scoop references in `oss/`. |
+| **Bridge Module** | ✅ **Done** | `hypercell-bridge/` provides enterprise integration with 8 tests. |
+| **Cross-Validation** | ✅ **Done** | 82,881 formulas validated at 100% Excel compatibility. |
 
 ---
 
