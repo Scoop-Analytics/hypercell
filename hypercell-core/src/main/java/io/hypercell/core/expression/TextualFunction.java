@@ -2,8 +2,6 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -19,9 +17,9 @@ import org.apache.poi.ss.format.CellFormat;
 import org.apache.poi.ss.format.CellFormatResult;
 
 import org.checkerframework.checker.regex.qual.Regex;
-import io.hypercell.core.util.FormattingUtils;
-import io.hypercell.core.datatable.CellType;
-import io.hypercell.core.datatable.TableCell;
+import scoop.datagrid.ExcelDataGrid;
+import scoop.datatable.CellType;
+import scoop.datatable.TableCell;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
@@ -48,7 +46,7 @@ public class TextualFunction extends Function
                 return cacheValue;
             }
         }
-        if (type == HyperCellExpressionParser.MIDTOKEN)
+        if (type == ScoopExpressionParser.MIDTOKEN)
         {
             MemCell text = expressions.get(0).calculateCellValue();
             if (text == null || text.getStringValue() == null)
@@ -67,7 +65,7 @@ public class TextualFunction extends Function
             String result = val.substring(startIndex,
                     Math.max(startIndex, Math.min(startIndex + lengthVal, val.length())));
             return getReturn(new MemCell(result));
-        } else if (type == HyperCellExpressionParser.FINDTOKEN || type == HyperCellExpressionParser.SEARCHTOKEN)
+        } else if (type == ScoopExpressionParser.FINDTOKEN || type == ScoopExpressionParser.SEARCHTOKEN)
         {
             MemCell findText = expressions.get(0).calculateCellValue();
             if (findText == null || findText.getStringValue() == null)
@@ -86,7 +84,7 @@ public class TextualFunction extends Function
             }
             String intext = inText.getStringValue();
             String findtext = findText.getStringValue();
-            if (type == HyperCellExpressionParser.SEARCHTOKEN)
+            if (type == ScoopExpressionParser.SEARCHTOKEN)
             {
                 intext = intext.toLowerCase();
                 findtext = findtext.toLowerCase();
@@ -97,7 +95,7 @@ public class TextualFunction extends Function
                 return getReturn(new MemCell(FormulaError.VALUE));
             }
             return getReturn(new MemCell(result + 1));
-        } else if (type == HyperCellExpressionParser.LEFTTOKEN || type == HyperCellExpressionParser.RIGHTTOKEN)
+        } else if (type == ScoopExpressionParser.LEFTTOKEN || type == ScoopExpressionParser.RIGHTTOKEN)
         {
             MemCell text = expressions.getFirst().calculateCellValue();
             if (text == null || text.getStringValue() == null)
@@ -110,7 +108,7 @@ public class TextualFunction extends Function
                 if (numChars == null || numChars.getNumberValue() == null)
                     return getReturn(new MemCell(FormulaError.NA));
                 num = numChars.getNumberValue().intValue();
-                if (type == HyperCellExpressionParser.LEFTTOKEN)
+                if (type == ScoopExpressionParser.LEFTTOKEN)
                 {
                     return getReturn(
                             new MemCell(s.substring(0, (num >= 0 ? Math.min(num, s.length() - 1) : s.length() - 1))));
@@ -119,31 +117,31 @@ public class TextualFunction extends Function
                     return getReturn(new MemCell(s.substring(s.length() - (Math.min(s.length(), Math.max(num, 0))))));
                 }
             }
-            if (type == HyperCellExpressionParser.LEFTTOKEN)
+            if (type == ScoopExpressionParser.LEFTTOKEN)
             {
                 return getReturn(new MemCell(s.substring(0, 1)));
             } else
             {
                 return getReturn(new MemCell(s.substring(s.length() - 1)));
             }
-        } else if (type == HyperCellExpressionParser.LENTOKEN)
+        } else if (type == ScoopExpressionParser.LENTOKEN)
         {
             MemCell text = expressions.getFirst().calculateCellValue();
             if (text == null || text.getStringValue() == null)
                 return getReturn(new MemCell(FormulaError.NA));
             String s = text.getStringValue();
             return getReturn(new MemCell(s.length()));
-        } else if (type == HyperCellExpressionParser.LOWERTOKEN || type == HyperCellExpressionParser.UPPERTOKEN)
+        } else if (type == ScoopExpressionParser.LOWERTOKEN || type == ScoopExpressionParser.UPPERTOKEN)
         {
             MemCell text = expressions.getFirst().calculateCellValue();
             if (text == null || text.getStringValue() == null)
                 return getReturn(new MemCell(FormulaError.NA));
             String s = text.getStringValue();
-            if (type == HyperCellExpressionParser.LOWERTOKEN)
+            if (type == ScoopExpressionParser.LOWERTOKEN)
                 return getReturn(new MemCell(s.toLowerCase()));
             else
                 return getReturn(new MemCell(s.toUpperCase()));
-        } else if (type == HyperCellExpressionParser.PROPERTOKEN)
+        } else if (type == ScoopExpressionParser.PROPERTOKEN)
         {
             MemCell text = expressions.getFirst().calculateCellValue();
             if (text == null || text.getStringValue() == null)
@@ -171,14 +169,14 @@ public class TextualFunction extends Function
                 result.append(c);
             }
             return getReturn(new MemCell(result.toString()));
-        } else if (type == HyperCellExpressionParser.TRIMTOKEN)
+        } else if (type == ScoopExpressionParser.TRIMTOKEN)
         {
             MemCell text = expressions.getFirst().calculateCellValue();
             if (text == null || text.getStringValue() == null)
                 return getReturn(new MemCell(FormulaError.NA));
             String s = text.getStringValue();
             return getReturn(new MemCell(s.trim()));
-        } else if (type == HyperCellExpressionParser.TEXTTOKEN)
+        } else if (type == ScoopExpressionParser.TEXTTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null)
@@ -188,7 +186,7 @@ public class TextualFunction extends Function
                 return getReturn(new MemCell(FormulaError.NA));
             String fmt = format.getStringValue();
             return getReturn(new MemCell(formatValueUsingSheetFormatString(fmt, number.getNumberValue())));
-        } else if (type == HyperCellExpressionParser.TEXTAFTERTOKEN || type == HyperCellExpressionParser.TEXTBEFORETOKEN)
+        } else if (type == ScoopExpressionParser.TEXTAFTERTOKEN || type == ScoopExpressionParser.TEXTBEFORETOKEN)
         {
             MemCell text = expressions.getFirst().calculateCellValue();
             if (text == null || text.getStringValue() == null)
@@ -252,7 +250,7 @@ public class TextualFunction extends Function
             }
             if (pos >= 0)
             {
-                if (type == HyperCellExpressionParser.TEXTAFTERTOKEN)
+                if (type == ScoopExpressionParser.TEXTAFTERTOKEN)
                     result = new MemCell(textStr.substring(pos + delimiterText.length()));
                 else
                     result = new MemCell(textStr.substring(0, pos));
@@ -261,7 +259,7 @@ public class TextualFunction extends Function
                 result = ifNotFound != null ? ifNotFound : new MemCell(FormulaError.NA);
             }
             return getReturn(result);
-        } else if (type == HyperCellExpressionParser.TEXTJOINTOKEN)
+        } else if (type == ScoopExpressionParser.TEXTJOINTOKEN)
         {
             MemCell delimiter = null;
             Range delRange = null;
@@ -370,7 +368,7 @@ public class TextualFunction extends Function
                 }
             }
             return getReturn(new MemCell(sb.toString()));
-        } else if (type == HyperCellExpressionParser.REPLACETOKEN)
+        } else if (type == ScoopExpressionParser.REPLACETOKEN)
         {
             MemCell oldtext = expressions.getFirst().calculateCellValue();
             String s = getStringValue(oldtext, false);
@@ -394,7 +392,7 @@ public class TextualFunction extends Function
                         n +
                         s.substring(startnum + numchars - 1);
             return getReturn(new MemCell(sb));
-        } else if (type == HyperCellExpressionParser.SUBSTITUTETOKEN)
+        } else if (type == ScoopExpressionParser.SUBSTITUTETOKEN)
         {
             MemCell text = expressions.getFirst().calculateCellValue();
             String textStr = getStringValue(text, false);
@@ -436,7 +434,7 @@ public class TextualFunction extends Function
             {
                 return getReturn(new MemCell(textStr.replace(oldtextStr, newtextStr)));
             }
-        } else if (type == HyperCellExpressionParser.VALUETOKEN)
+        } else if (type == ScoopExpressionParser.VALUETOKEN)
         {
             MemCell valuemc = expressions.getFirst().calculateCellValue();
             if (valuemc == null)
@@ -476,7 +474,7 @@ public class TextualFunction extends Function
                 }
             }
             return getReturn(new MemCell(FormulaError.VALUE));
-        } else if (type == HyperCellExpressionParser.CONCATENATETOKEN)
+        } else if (type == ScoopExpressionParser.CONCATENATETOKEN)
         {
             StringBuilder result = new StringBuilder();
             for (var expression : expressions)
@@ -488,7 +486,7 @@ public class TextualFunction extends Function
                 }
             }
             return getReturn(new MemCell(result.toString()));
-        } else if (type == HyperCellExpressionParser.REGEXREPLACETOKEN)
+        } else if (type == ScoopExpressionParser.REGEXREPLACETOKEN)
         {
             ScoopExpression textExpr = expressions.get(0);
             ScoopExpression patterExpr = expressions.get(1);
@@ -515,12 +513,12 @@ public class TextualFunction extends Function
     public static String formatValueUsingSheetFormatString(String fmt, Number numberValue)
     {
         String s = null;
-        if (FormattingUtils.isExcelDateFormat(fmt))
+        if (ExcelDataGrid.isExcelDateFormat(fmt))
         {
             ZonedDateTime zdt = DateTimeFunction.getDateFromSheetNumber(
                     numberValue.doubleValue());
             String jfmt = DateTimeFunction.getJavaDateFormatFromSheetFormat(
-                    FormattingUtils.removeBadDateFormatCharacters(fmt.toLowerCase()));
+                    ExcelDataGrid.removeBadDateFormatCharacters(fmt.toLowerCase()));
             SimpleDateFormat sdf = new SimpleDateFormat(jfmt);
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             s = sdf.format(Date.from(zdt.toInstant()));

@@ -1,7 +1,4 @@
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
-import io.hypercell.api.FunctionRegistry; // Added
 
 import java.util.List;
 
@@ -14,42 +11,42 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// REMOVED ScoopContext, ScoopException imports
-import io.hypercell.formula.HyperCellExpressionParser.ADDOPContext;
-import io.hypercell.formula.HyperCellExpressionParser.BOOLEANContext;
-import io.hypercell.formula.HyperCellExpressionParser.CELLContext;
-import io.hypercell.formula.HyperCellExpressionParser.COMPOPPContext;
-import io.hypercell.formula.HyperCellExpressionParser.CONCATOPPContext;
-import io.hypercell.formula.HyperCellExpressionParser.DATETIMEContext;
-import io.hypercell.formula.HyperCellExpressionParser.DECIMALVALContext;
-import io.hypercell.formula.HyperCellExpressionParser.FINANCIALContext;
-import io.hypercell.formula.HyperCellExpressionParser.FilteredrangeContext;
-import io.hypercell.formula.HyperCellExpressionParser.INFORMATIONALContext;
-import io.hypercell.formula.HyperCellExpressionParser.INTEGERVALContext;
-import io.hypercell.formula.HyperCellExpressionParser.ItemContext;
-import io.hypercell.formula.HyperCellExpressionParser.LOGICALContext;
-import io.hypercell.formula.HyperCellExpressionParser.LOOKUPContext;
-import io.hypercell.formula.HyperCellExpressionParser.MATHContext;
-import io.hypercell.formula.HyperCellExpressionParser.MULOPContext;
-import io.hypercell.formula.HyperCellExpressionParser.NUMBERContext;
-import io.hypercell.formula.HyperCellExpressionParser.OFFSETContext;
-import io.hypercell.formula.HyperCellExpressionParser.PARENContext;
-import io.hypercell.formula.HyperCellExpressionParser.POWERContext;
-import io.hypercell.formula.HyperCellExpressionParser.REFContext;
-import io.hypercell.formula.HyperCellExpressionParser.RangeContext;
-import io.hypercell.formula.HyperCellExpressionParser.RangeorreferenceContext;
-import io.hypercell.formula.HyperCellExpressionParser.STATISTICALContext;
-import io.hypercell.formula.HyperCellExpressionParser.STRINGContext;
-import io.hypercell.formula.HyperCellExpressionParser.StartContext;
-import io.hypercell.formula.HyperCellExpressionParser.TEXTUALContext;
-import io.hypercell.formula.HyperCellExpressionParser.TablearrayContext;
-import io.hypercell.formula.HyperCellExpressionParser.UMINUSContext;
-import io.hypercell.formula.HyperCellExpressionParser.FILTERContext;
+import io.hypercell.api.HyperCellException;
+import scoop.ScoopContext;
+import scoop.expression.ScoopExpressionParser.ADDOPContext;
+import scoop.expression.ScoopExpressionParser.BOOLEANContext;
+import scoop.expression.ScoopExpressionParser.CELLContext;
+import scoop.expression.ScoopExpressionParser.COMPOPPContext;
+import scoop.expression.ScoopExpressionParser.CONCATOPPContext;
+import scoop.expression.ScoopExpressionParser.DATETIMEContext;
+import scoop.expression.ScoopExpressionParser.DECIMALVALContext;
+import scoop.expression.ScoopExpressionParser.FINANCIALContext;
+import scoop.expression.ScoopExpressionParser.FilteredrangeContext;
+import scoop.expression.ScoopExpressionParser.INFORMATIONALContext;
+import scoop.expression.ScoopExpressionParser.INTEGERVALContext;
+import scoop.expression.ScoopExpressionParser.ItemContext;
+import scoop.expression.ScoopExpressionParser.LOGICALContext;
+import scoop.expression.ScoopExpressionParser.LOOKUPContext;
+import scoop.expression.ScoopExpressionParser.MATHContext;
+import scoop.expression.ScoopExpressionParser.MULOPContext;
+import scoop.expression.ScoopExpressionParser.NUMBERContext;
+import scoop.expression.ScoopExpressionParser.OFFSETContext;
+import scoop.expression.ScoopExpressionParser.PARENContext;
+import scoop.expression.ScoopExpressionParser.POWERContext;
+import scoop.expression.ScoopExpressionParser.REFContext;
+import scoop.expression.ScoopExpressionParser.RangeContext;
+import scoop.expression.ScoopExpressionParser.RangeorreferenceContext;
+import scoop.expression.ScoopExpressionParser.STATISTICALContext;
+import scoop.expression.ScoopExpressionParser.STRINGContext;
+import scoop.expression.ScoopExpressionParser.StartContext;
+import scoop.expression.ScoopExpressionParser.TEXTUALContext;
+import scoop.expression.ScoopExpressionParser.TablearrayContext;
+import scoop.expression.ScoopExpressionParser.UMINUSContext;
+import scoop.expression.ScoopExpressionParser.FILTERContext;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 import io.hypercell.core.grid.MemSheet;
-import io.hypercell.core.expression.ThrowingErrorListener; // Updated package assumption
-
+import io.hypercell.core.grid.ThrowingErrorListener;
 
 public class Compile
 {
@@ -57,12 +54,11 @@ public class Compile
     private final ParseTree tree;
     private ScoopExpression exp;
     private final CompileContext cc;
-    private FunctionRegistry registry; // Added
 
-    public Compile(String formula, MemSheet sheet, boolean throwErrors)
+    public Compile(ScoopContext sc, String formula, MemSheet sheet, boolean throwErrors)
     {
         CharStream input = CharStreams.fromString(formula);
-        HyperCellExpressionLexer lex = new HyperCellExpressionLexer(input);
+        ScoopExpressionLexer lex = new ScoopExpressionLexer(input);
         if (throwErrors)
         {
             lex.removeErrorListeners();
@@ -70,43 +66,43 @@ public class Compile
         }
         String errorString = null;
         CommonTokenStream tokens = new CommonTokenStream(lex);
-        HyperCellExpressionParser scoopparser = new HyperCellExpressionParser(tokens);
+        ScoopExpressionParser scoopparser = new ScoopExpressionParser(tokens);
         if (throwErrors)
         {
             scoopparser.removeErrorListeners();
             scoopparser.addErrorListener(ThrowingErrorListener.INSTANCE);
         }
         tree = scoopparser.start();
-        this.registry = sheet.getWorkbook().getRegistry();
-        cc = new CompileContext(sheet, this.registry);
+        cc = new CompileContext(sc, sheet);
         compile();
     }
 
-    public Compile(ParseTree tree, CompileContext cc, FunctionRegistry registry)
+    public Compile(ParseTree tree, CompileContext cc)
     {
         this.tree = tree;
         this.cc = cc;
-        this.registry = registry;
         compile();
-    }
-    
-    // Compatibility constructor if needed by BaseFunctionExpression
-    public Compile(ParseTree tree, CompileContext cc) {
-        this(tree, cc, cc.getRegistry());
     }
 
     public Compile(String formula, CompileContext cc)
     {
         CharStream input = CharStreams.fromString(formula);
-        HyperCellExpressionLexer lex = new HyperCellExpressionLexer(input);
+        ScoopExpressionLexer lex = new ScoopExpressionLexer(input);
         String errorString = null;
         CommonTokenStream tokens = new CommonTokenStream(lex);
-        HyperCellExpressionParser scoopparser = new HyperCellExpressionParser(tokens);
+        ScoopExpressionParser scoopparser = new ScoopExpressionParser(tokens);
         tree = scoopparser.start();
         this.cc = cc;
-        this.registry = cc.getRegistry();
         compile();
     }
+
+    public Compile(ScoopContext sc, ParseTree tree, MemSheet sheet)
+    {
+        this.tree = tree;
+        this.cc = new CompileContext(sc, sheet);
+        compile();
+    }
+
     private void compile()
     {
         if (tree instanceof StartContext)
@@ -132,7 +128,7 @@ public class Compile
                 try
                 {
                     exp = new SheetNumber(tree.getChild(0));
-                } catch (Exception e)
+                } catch (HyperCellException e)
                 {
                     logger.error(e.getMessage());
                 }
@@ -189,21 +185,21 @@ public class Compile
             Token t = ((TerminalNodeImpl) child.getChild(0)).symbol;
             switch (t.getType())
             {
-                case HyperCellExpressionLexer.VLOOKUPTOKEN:
-                case HyperCellExpressionLexer.HLOOKUPTOKEN:
+                case ScoopExpressionLexer.VLOOKUPTOKEN:
+                case ScoopExpressionLexer.HLOOKUPTOKEN:
                     exp = new LookupFunction(child, cc);
                     break;
-                case HyperCellExpressionParser.IFTOKEN:
-                case HyperCellExpressionParser.IFSTOKEN:
-                case HyperCellExpressionParser.IFERRORTOKEN:
-                case HyperCellExpressionParser.IFNATOKEN:
-                case HyperCellExpressionParser.TRUETOKEN:
-                case HyperCellExpressionParser.FALSETOKEN:
-                case HyperCellExpressionLexer.ANDTOKEN:
-                case HyperCellExpressionLexer.ORTOKEN:
-                case HyperCellExpressionLexer.XORTOKEN:
-                case HyperCellExpressionLexer.NOTTOKEN:
-                case HyperCellExpressionLexer.EQTOKEN:
+                case ScoopExpressionParser.IFTOKEN:
+                case ScoopExpressionParser.IFSTOKEN:
+                case ScoopExpressionParser.IFERRORTOKEN:
+                case ScoopExpressionParser.IFNATOKEN:
+                case ScoopExpressionParser.TRUETOKEN:
+                case ScoopExpressionParser.FALSETOKEN:
+                case ScoopExpressionLexer.ANDTOKEN:
+                case ScoopExpressionLexer.ORTOKEN:
+                case ScoopExpressionLexer.XORTOKEN:
+                case ScoopExpressionLexer.NOTTOKEN:
+                case ScoopExpressionLexer.EQTOKEN:
                     exp = new LogicalFunction(child, cc);
                     break;
                 default:
@@ -248,34 +244,34 @@ public class Compile
             {
                 exp = new SheetNumber(0);
             }
-        } else if (tree instanceof HyperCellExpressionParser.CONSTANTContext)
+        } else if (tree instanceof ScoopExpressionParser.CONSTANTContext)
         {
             exp = new SheetConstant(tree);
         } else if (tree instanceof TablearrayContext)
         {
             exp = new Range(cc.getSheet(), tree);
             cc.addRange((Range) exp);
-        } else if (tree instanceof HyperCellExpressionParser.SCOOPContext)
+        } else if (tree instanceof ScoopExpressionParser.SCOOPContext)
         {
             ParseTree child = tree.getChild(0);
-            exp = new ErrorFunction(FormulaError.NAME);
-        } else if (tree instanceof HyperCellExpressionParser.SHEETSContext)
+            exp = new ScoopFunction(child, cc);
+        } else if (tree instanceof ScoopExpressionParser.SHEETSContext)
         {
             ParseTree child = tree.getChild(0);
-            if (child instanceof HyperCellExpressionParser.COMSUMTOKENContext)
+            if (child instanceof ScoopExpressionParser.COMSUMTOKENContext)
             {
                 // Just return zero
                 if (child.getText().startsWith("com.sun.star.sheet.addin.Analysis.getEomonth("))
                 {
                     MemCell newCell = new MemCell();
                     newCell.setFormula("EOMONTH(" + child.getText().substring(45));
-                    newCell.compileFormula(cc.getSheet());
-                    exp = new ScoopExpressionWrapper(newCell.getCompile().getExpression());
+                    newCell.compileFormula(cc.getSc(), cc.getSheet());
+                    exp = newCell.getCompile().getExpression();
                 } else
                 {
                     exp = new SheetNumber(0);
                 }
-            } else if (child instanceof HyperCellExpressionParser.XLUDFContext)
+            } else if (child instanceof ScoopExpressionParser.XLUDFContext)
             {
                 /*
                  * Ignore the __xludf.DUMMYFUNCTION(" expression ") construct generated by Sheets
@@ -297,13 +293,13 @@ public class Compile
                     exp = new ErrorFunction(FormulaError.NA);
                 }
             }
-        } else if (tree instanceof HyperCellExpressionParser.BooleanarrayContext)
+        } else if (tree instanceof ScoopExpressionParser.BooleanarrayContext)
         {
             exp = new BooleanArray(cc, tree);
-        } else if (tree instanceof HyperCellExpressionParser.ExpressionarrayContext)
+        } else if (tree instanceof ScoopExpressionParser.ExpressionarrayContext)
         {
             exp = new ExpressionAray(cc, tree);
-        } else if (tree instanceof HyperCellExpressionParser.StringContext)
+        } else if (tree instanceof ScoopExpressionParser.StringContext)
         {
             exp = new SheetString(tree);
         } else

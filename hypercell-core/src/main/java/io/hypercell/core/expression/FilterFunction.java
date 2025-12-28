@@ -2,8 +2,6 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import io.hypercell.api.RangeAddress;
@@ -33,7 +31,7 @@ public class FilterFunction extends Function
                 return cacheValue;
             }
         }
-        if (type == HyperCellExpressionParser.FILTERTOKEN)
+        if (type == ScoopExpressionParser.FILTERTOKEN)
         {
             Range range = (Range) expressions.getFirst();
             if (range == null)
@@ -100,7 +98,7 @@ public class FilterFunction extends Function
             MemCell[][] resultArray = new MemCell[resultRows.size()][];
             resultRows.toArray(resultArray);
             return getReturn(new MemCell(resultArray));
-        } else if (type == HyperCellExpressionParser.UNIQUETOKEN)
+        } else if (type == ScoopExpressionParser.UNIQUETOKEN)
         {
             if (expressions.getFirst() instanceof Range range)
             {
@@ -155,7 +153,7 @@ public class FilterFunction extends Function
                 }
                 return getReturn(new MemCell(resultArray));
             }
-        } else if (type == HyperCellExpressionParser.SORTTOKEN)
+        } else if (type == ScoopExpressionParser.SORTTOKEN)
         {
             int sortIndex = 0;
             boolean ascending = true;
@@ -248,7 +246,7 @@ public class FilterFunction extends Function
     @Override
     public SpillArea possibleSpillRange()
     {
-        if (type == HyperCellExpressionParser.FILTERTOKEN)
+        if (type == ScoopExpressionParser.FILTERTOKEN)
         {
             Range range = (Range) expressions.getFirst();
             SpillArea spillArea = new SpillArea();

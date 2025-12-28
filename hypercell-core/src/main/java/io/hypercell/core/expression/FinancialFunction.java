@@ -2,8 +2,6 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class FinancialFunction extends Function
                 return cacheValue;
             }
         }
-        if (type == HyperCellExpressionLexer.IRRTOKEN)
+        if (type == ScoopExpressionLexer.IRRTOKEN)
         {
             double[] values = getValues((Range) expressions.get(0));
             if (expressions.size() > 1)
@@ -51,7 +49,7 @@ public class FinancialFunction extends Function
             {
                 return getReturn(new MemCell(Irr.irr(values)));
             }
-        } else if (type == HyperCellExpressionLexer.NPVTOKEN)
+        } else if (type == ScoopExpressionLexer.NPVTOKEN)
         {
             double[] values = getValues((Range) expressions.get(1));
             MemCell mc = expressions.get(0).calculateCellValue();

@@ -2,16 +2,14 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.hypercell.core.util.FormattingUtils;
-import io.hypercell.formula.HyperCellExpressionParser.SumproductargumentsContext;
+import scoop.datagrid.ExcelDataGrid;
+import scoop.expression.ScoopExpressionParser.SumproductargumentsContext;
 import io.hypercell.core.grid.MemCell;
 import io.hypercell.core.grid.MemCellContext;
 
@@ -50,8 +48,8 @@ public class Function extends ScoopExpression
                 {
                     for (int j = 0; j < child.getChildCount(); j += 1)
                     {
-                        if (child.getChild(j) instanceof HyperCellExpressionParser.RangeorreferenceContext ||
-                                child.getChild(j) instanceof HyperCellExpressionParser.FilteredrangeContext)
+                        if (child.getChild(j) instanceof ScoopExpressionParser.RangeorreferenceContext ||
+                                child.getChild(j) instanceof ScoopExpressionParser.FilteredrangeContext)
                         {
                             Compile c = new Compile(child.getChild(j), cc);
                             ScoopExpression exp = c.getExpression();
@@ -87,7 +85,7 @@ public class Function extends ScoopExpression
                     String formatString = context != null && context.getStyle() != null ? context.getStyle()
                                                                                                  .getFormatString() : null;
                     String numberFormat = "####";
-                    if (FormattingUtils.isDateFormat(formatString))
+                    if (ExcelDataGrid.isDateFormat(formatString))
                     {
                         /*
                          * in Excel, Google Sheets and Libre, when a date is turned into a string, if it's in a formula

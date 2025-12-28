@@ -1,6 +1,4 @@
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import io.hypercell.api.RangeAddress;
@@ -21,24 +19,24 @@ public class BooleanArray extends ScoopExpression
 
     public BooleanArray(CompileContext cc, ParseTree tree)
     {
-        if (tree instanceof HyperCellExpressionParser.COMPAREARRAYContext)
+        if (tree instanceof ScoopExpressionParser.COMPAREARRAYContext)
         {
             range = new Range(cc.getSheet(), tree.getChild(0));
             operator = tree.getChild(1).getText();
             Compile c = new Compile(tree.getChild(2), cc);
             exp = c.getExpression();
-        } else if (tree instanceof HyperCellExpressionParser.BOOLEANARRAYOPContext)
+        } else if (tree instanceof ScoopExpressionParser.BOOLEANARRAYOPContext)
         {
             operator = tree.getChild(1).getText();
             Compile c = new Compile(tree.getChild(0), cc);
             left = c.getExpression();
             c = new Compile(tree.getChild(2), cc);
             right = c.getExpression();
-        } else if (tree instanceof HyperCellExpressionParser.GROUPARRAYContext)
+        } else if (tree instanceof ScoopExpressionParser.GROUPARRAYContext)
         {
             Compile c = new Compile(tree.getChild(1), cc);
             exp = c.getExpression();
-        } else if (tree instanceof HyperCellExpressionParser.NOTARRAYContext)
+        } else if (tree instanceof ScoopExpressionParser.NOTARRAYContext)
         {
         }
     }

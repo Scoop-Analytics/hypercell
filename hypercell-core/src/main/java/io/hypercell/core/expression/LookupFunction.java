@@ -2,12 +2,10 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jsoup.select.Evaluator;
-import scoop.ScoopException;
+import io.hypercell.api.HyperCellException;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
@@ -38,9 +36,9 @@ public class LookupFunction extends Function
                 return cacheValue;
             }
         }
-        if (type == HyperCellExpressionLexer.HLOOKUPTOKEN || type == HyperCellExpressionLexer.VLOOKUPTOKEN)
+        if (type == ScoopExpressionLexer.HLOOKUPTOKEN || type == ScoopExpressionLexer.VLOOKUPTOKEN)
         {
-            boolean hLookup = type == HyperCellExpressionLexer.HLOOKUPTOKEN;
+            boolean hLookup = type == ScoopExpressionLexer.HLOOKUPTOKEN;
             MemCell lv = expressions.getFirst().calculateCellValue();
             if (lv == null) return new MemCell(FormulaError.NA);
             Range r = (Range) expressions.get(1);
@@ -177,7 +175,7 @@ public class LookupFunction extends Function
                 return getReturn(start.calculateCellValue(lastRow, lastCol));
             }
             return getReturn(new MemCell(FormulaError.NA));
-        } else if (type == HyperCellExpressionLexer.XLOOKUPTOKEN)
+        } else if (type == ScoopExpressionLexer.XLOOKUPTOKEN)
         {
             MemCell lv = expressions.get(0).calculateCellValue();
             if (lv == null) return new MemCell(FormulaError.NA);
@@ -229,14 +227,14 @@ public class LookupFunction extends Function
             {
                 return getReturn(new MemCell(FormulaError.NA));
             }
-        } else if (type == HyperCellExpressionParser.CHOOSETOKEN)
+        } else if (type == ScoopExpressionParser.CHOOSETOKEN)
         {
             MemCell position = expressions.get(0).calculateCellValue();
             if (position == null || position.getNumberValue() == null) return getReturn(new MemCell(FormulaError.NA));
             int pos = position.getNumberValue().intValue() - 1;
             if (pos >= expressions.size() - 1) return getReturn(new MemCell(FormulaError.NA));
             return getReturn(expressions.get(pos + 1).calculateCellValue());
-        } else if (type == HyperCellExpressionParser.SWITCHTOKEN)
+        } else if (type == ScoopExpressionParser.SWITCHTOKEN)
         {
             MemCell position = expressions.getFirst().calculateCellValue();
             MemCell defaultValue = null;
@@ -264,7 +262,7 @@ public class LookupFunction extends Function
                 return getReturn(defaultValue != null ? defaultValue : new MemCell(FormulaError.NA));
             }
             return getReturn(foundValue);
-        } else if (type == HyperCellExpressionParser.MATCHTOKEN)
+        } else if (type == ScoopExpressionParser.MATCHTOKEN)
         {
             if (expressions.size() < 2) return getReturn(new MemCell(FormulaError.NA));
             MemCell lv = expressions.get(0).calculateCellValue();
@@ -365,7 +363,7 @@ public class LookupFunction extends Function
                 return getReturn(new MemCell(typeCount));
             }
             return getReturn(new MemCell(FormulaError.NA));
-        } else if (type == HyperCellExpressionParser.INDEXTOKEN)
+        } else if (type == ScoopExpressionParser.INDEXTOKEN)
         {
             Range r = (Range) expressions.get(0);
             Identifier start = r.getStartAddress();

@@ -2,11 +2,9 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import io.hypercell.core.dateparser.DateAnalyzer;
+import scoop.dateparser.DateAnalyzer;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
@@ -135,7 +133,7 @@ public class DateTimeFunction extends Function
         MemCell memCellResult = null;
         try
         {
-            if (type == HyperCellExpressionParser.EOMONTHTOKEN)
+            if (type == ScoopExpressionParser.EOMONTHTOKEN)
             {
                 MemCell startd = expressions.getFirst().calculateCellValue();
                 if (startd == null)
@@ -161,7 +159,7 @@ public class DateTimeFunction extends Function
                 startIn = startIn.minusDays(1);
                 double d = getSheetDateNumber(startIn.toEpochSecond());
                 memCellResult = new MemCell(d);
-            } else if (type == HyperCellExpressionParser.EDATETOKEN)
+            } else if (type == ScoopExpressionParser.EDATETOKEN)
             {
                 MemCell startd = expressions.getFirst().calculateCellValue();
                 if (startd == null)
@@ -181,7 +179,7 @@ public class DateTimeFunction extends Function
                 startIn = startIn.plusMonths(months);
                 double d = getSheetDateNumber(startIn.toEpochSecond());
                 memCellResult = new MemCell(d);
-            } else if (type == HyperCellExpressionParser.DATETOKEN)
+            } else if (type == ScoopExpressionParser.DATETOKEN)
             {
                 int year = expressions.get(0).getIntValue();
                 int month = expressions.get(1).getIntValue();
@@ -191,14 +189,14 @@ public class DateTimeFunction extends Function
                 ld = ld.plusDays(day - 1);
                 double d = ld.toEpochDay() + 25569;
                 memCellResult = new MemCell(d);
-            } else if (type == HyperCellExpressionParser.TIMETOKEN)
+            } else if (type == ScoopExpressionParser.TIMETOKEN)
             {
                 double hour = expressions.get(0).getDoubleValue();
                 double minute = expressions.get(1).getDoubleValue();
                 double second = expressions.get(2).getDoubleValue();
                 double d = (hour / 24) + (minute / 24 / 60) + (second / 24 / 60 / 60);
                 memCellResult = new MemCell(d);
-            } else if (type == HyperCellExpressionParser.DATEDIFTOKEN)
+            } else if (type == ScoopExpressionParser.DATEDIFTOKEN)
             {
                 double date1 = expressions.get(0).getDoubleValue();
                 double date2 = expressions.get(1).getDoubleValue();
@@ -235,7 +233,7 @@ public class DateTimeFunction extends Function
                         break;
                 }
                 memCellResult = new MemCell(result);
-            } else if (type == HyperCellExpressionParser.DATEVALUETOKEN)
+            } else if (type == ScoopExpressionParser.DATEVALUETOKEN)
             {
                 String dateStr = expressions.getFirst().calculateCellValue().getStringValue();
                 int year;
@@ -257,7 +255,7 @@ public class DateTimeFunction extends Function
                 Instant in = dateStr != null ? getDateFromString(dateStr, year) : null;
                 double num = getSheetDateNumber(in != null ? in.getEpochSecond() : 0);
                 memCellResult = new MemCell(num);
-            } else if (type == HyperCellExpressionParser.TIMEVALUETOKEN)
+            } else if (type == ScoopExpressionParser.TIMEVALUETOKEN)
             {
                 String dateStr = expressions.getFirst().calculateCellValue().getStringValue();
                 Instant in = getDateFromString(dateStr, LocalDate.now().getYear());
@@ -269,7 +267,7 @@ public class DateTimeFunction extends Function
                 double num = getSheetDateNumber(in != null ? in.getEpochSecond() : 0);
                 num = num - Math.floor(num);
                 memCellResult = new MemCell(num);
-            } else if (type == HyperCellExpressionParser.DAYTOKEN)
+            } else if (type == ScoopExpressionParser.DAYTOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)
@@ -278,7 +276,7 @@ public class DateTimeFunction extends Function
                 }
                 ZonedDateTime zdt = getDateFromSheetNumber(dateNum.doubleValue());
                 memCellResult = new MemCell(zdt.getDayOfMonth());
-            } else if (type == HyperCellExpressionParser.MONTHTOKEN)
+            } else if (type == ScoopExpressionParser.MONTHTOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)
@@ -287,7 +285,7 @@ public class DateTimeFunction extends Function
                 }
                 ZonedDateTime zdt = getDateFromSheetNumber(dateNum.doubleValue());
                 memCellResult = new MemCell(zdt.getMonth().getValue());
-            } else if (type == HyperCellExpressionParser.YEARTOKEN)
+            } else if (type == ScoopExpressionParser.YEARTOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)
@@ -296,7 +294,7 @@ public class DateTimeFunction extends Function
                 }
                 ZonedDateTime zdt = getDateFromSheetNumber(dateNum.doubleValue());
                 memCellResult = new MemCell(zdt.getYear());
-            } else if (type == HyperCellExpressionParser.HOURTOKEN)
+            } else if (type == ScoopExpressionParser.HOURTOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)
@@ -305,7 +303,7 @@ public class DateTimeFunction extends Function
                 }
                 ZonedDateTime zdt = getDateFromSheetNumber(dateNum.doubleValue());
                 memCellResult = new MemCell(zdt.getHour());
-            } else if (type == HyperCellExpressionParser.MINUTETOKEN)
+            } else if (type == ScoopExpressionParser.MINUTETOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)
@@ -314,7 +312,7 @@ public class DateTimeFunction extends Function
                 }
                 ZonedDateTime zdt = getDateFromSheetNumber(dateNum.doubleValue());
                 memCellResult = new MemCell(zdt.getMinute());
-            } else if (type == HyperCellExpressionParser.SECONDTOKEN)
+            } else if (type == ScoopExpressionParser.SECONDTOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)
@@ -323,16 +321,16 @@ public class DateTimeFunction extends Function
                 }
                 ZonedDateTime zdt = getDateFromSheetNumber(dateNum.doubleValue());
                 memCellResult = new MemCell(zdt.getSecond());
-            } else if (type == HyperCellExpressionParser.NOWTOKEN)
+            } else if (type == ScoopExpressionParser.NOWTOKEN)
             {
                 double num = getSheetDateNumber(Instant.now().getEpochSecond());
                 memCellResult = new MemCell(num);
-            } else if (type == HyperCellExpressionParser.TODAYTOKEN)
+            } else if (type == ScoopExpressionParser.TODAYTOKEN)
             {
                 double num = getSheetDateNumber(Instant.now().getEpochSecond());
                 num = Math.floor(num);
                 memCellResult = new MemCell(num);
-            } else if (type == HyperCellExpressionParser.NETWORKDAYSTOKEN)
+            } else if (type == ScoopExpressionParser.NETWORKDAYSTOKEN)
             {
                 MemCell date1 = expressions.get(0).calculateCellValue();
                 MemCell date2 = expressions.get(1).calculateCellValue();
@@ -379,7 +377,7 @@ public class DateTimeFunction extends Function
                     zdt1 = zdt1.plusDays(1);
                 }
                 memCellResult = new MemCell(count);
-            } else if (type == HyperCellExpressionParser.WEEKDAYTOKEN)
+            } else if (type == ScoopExpressionParser.WEEKDAYTOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)
@@ -404,7 +402,7 @@ public class DateTimeFunction extends Function
                     case 16 -> new MemCell((dow + 1) % 7 + 1); // Sat 1 - Fri 7
                     default -> new MemCell(FormulaError.NUM);
                 };
-            } else if (type == HyperCellExpressionParser.WEEKNUMTOKEN)
+            } else if (type == ScoopExpressionParser.WEEKNUMTOKEN)
             {
                 Number dateNum = expressions.getFirst().getNumberValue();
                 if (dateNum == null)

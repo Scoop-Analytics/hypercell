@@ -2,8 +2,6 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -33,7 +31,7 @@ public class StatisticalFunction extends Function
                 return cacheValue;
             }
         }
-        if (type == HyperCellExpressionParser.NORMDISTTOKEN)
+        if (type == ScoopExpressionParser.NORMDISTTOKEN)
         {
             MemCell xmc = expressions.getFirst().calculateCellValue();
             Number xn = xmc.getNumberValue();
@@ -64,7 +62,7 @@ public class StatisticalFunction extends Function
             {
                 return getReturn(new MemCell(nd.density(xn.doubleValue())));
             }
-        } else if (type == HyperCellExpressionParser.NORMSDISTTOKEN)
+        } else if (type == ScoopExpressionParser.NORMSDISTTOKEN)
         {
             MemCell xmc = expressions.get(0).calculateCellValue();
             Number xn = xmc.getNumberValue();

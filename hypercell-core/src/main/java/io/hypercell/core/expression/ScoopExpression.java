@@ -2,8 +2,6 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import scoop.worksheet.MemCellCalculationCache;
 import io.hypercell.core.grid.MemCell;
@@ -11,14 +9,9 @@ import io.hypercell.core.grid.MemCell;
 /**
  * @author bradpeters
  */
-public abstract class ScoopExpression implements io.hypercell.api.Expression
+public abstract class ScoopExpression
 {
     public MemCellCalculationCache memCellCalculationCache = null;
-
-    @Override
-    public io.hypercell.api.CellValue evaluate() {
-        return calculateCellValue();
-    }
 
     public abstract MemCell calculateCellValue();
 

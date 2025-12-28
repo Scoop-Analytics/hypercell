@@ -2,12 +2,10 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import org.antlr.v4.runtime.tree.ParseTree;
-import io.hypercell.core.datatable.AggregationRule;
+import scoop.datatable.AggregationRule;
 import scoop.worksheet.CalculatedSourceWorkbook;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;
@@ -35,22 +33,22 @@ public class MathFunction extends Function
         super(tree, cc);
         if (expressions != null && expressions.size() == 1 && expressions.getFirst() instanceof Identifier identifier)
         {
-            if (type == HyperCellExpressionLexer.SUMTOKEN)
+            if (type == ScoopExpressionLexer.SUMTOKEN)
             {
                 identifier.setAggregationRule(AggregationRule.Sum);
-            } else if (type == HyperCellExpressionLexer.COUNTTOKEN)
+            } else if (type == ScoopExpressionLexer.COUNTTOKEN)
             {
                 identifier.setAggregationRule(AggregationRule.Count);
-            } else if (type == HyperCellExpressionLexer.AVERAGETOKEN)
+            } else if (type == ScoopExpressionLexer.AVERAGETOKEN)
             {
                 identifier.setAggregationRule(AggregationRule.Avg);
-            } else if (type == HyperCellExpressionLexer.MINTOKEN)
+            } else if (type == ScoopExpressionLexer.MINTOKEN)
             {
                 identifier.setAggregationRule(AggregationRule.Min);
-            } else if (type == HyperCellExpressionLexer.MAXTOKEN)
+            } else if (type == ScoopExpressionLexer.MAXTOKEN)
             {
                 identifier.setAggregationRule(AggregationRule.Max);
-            } else if (type == HyperCellExpressionLexer.STDEVTOKEN)
+            } else if (type == ScoopExpressionLexer.STDEVTOKEN)
             {
                 identifier.setAggregationRule(AggregationRule.StdDev);
             }
@@ -74,7 +72,7 @@ public class MathFunction extends Function
         int count = 0;
         List<Double> values = new ArrayList<>();
         MemCell memCellResult = null;
-        if (type == HyperCellExpressionLexer.LOGTOKEN || type == HyperCellExpressionLexer.LOG10TOKEN || type == HyperCellExpressionLexer.LNTOKEN || type == HyperCellExpressionLexer.EXPTOKEN)
+        if (type == ScoopExpressionLexer.LOGTOKEN || type == ScoopExpressionLexer.LOG10TOKEN || type == ScoopExpressionLexer.LNTOKEN || type == ScoopExpressionLexer.EXPTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null)
@@ -87,19 +85,19 @@ public class MathFunction extends Function
                 {
                     return new MemCell(FormulaError.VALUE);
                 }
-                if (type == HyperCellExpressionLexer.LOGTOKEN || type == HyperCellExpressionLexer.LOG10TOKEN)
+                if (type == ScoopExpressionLexer.LOGTOKEN || type == ScoopExpressionLexer.LOG10TOKEN)
                 {
                     memCellResult = new MemCell(Math.log10(n.doubleValue()));
-                } else if (type == HyperCellExpressionLexer.LNTOKEN)
+                } else if (type == ScoopExpressionLexer.LNTOKEN)
                 {
                     memCellResult = new MemCell(Math.log(n.doubleValue()));
-                } else if (type == HyperCellExpressionLexer.EXPTOKEN)
+                } else if (type == ScoopExpressionLexer.EXPTOKEN)
                 {
                     memCellResult = new MemCell(Math.exp(n.doubleValue()));
                 }
             }
             return getReturn(memCellResult);
-        } else if (type == HyperCellExpressionLexer.COUNTIFTOKEN || type == HyperCellExpressionLexer.SUMIFTOKEN || type == HyperCellExpressionLexer.COUNTIFSTOKEN || type == HyperCellExpressionLexer.SUMIFSTOKEN || type == HyperCellExpressionLexer.AVERAGEIFTOKEN || type == HyperCellExpressionLexer.AVERAGEIFSTOKEN || type == HyperCellExpressionLexer.MAXIFSTOKEN || type == HyperCellExpressionLexer.MINIFSTOKEN)
+        } else if (type == ScoopExpressionLexer.COUNTIFTOKEN || type == ScoopExpressionLexer.SUMIFTOKEN || type == ScoopExpressionLexer.COUNTIFSTOKEN || type == ScoopExpressionLexer.SUMIFSTOKEN || type == ScoopExpressionLexer.AVERAGEIFTOKEN || type == ScoopExpressionLexer.AVERAGEIFSTOKEN || type == ScoopExpressionLexer.MAXIFSTOKEN || type == ScoopExpressionLexer.MINIFSTOKEN)
         {
             cc.setContainsAggregation(true);
             if (canPushDown())
@@ -111,7 +109,7 @@ public class MathFunction extends Function
             MemSheet valueSheet;
             boolean[] results = null;
             boolean[] touched = null;
-            if (type == HyperCellExpressionLexer.AVERAGEIFTOKEN || type == HyperCellExpressionLexer.SUMIFTOKEN || type == HyperCellExpressionLexer.COUNTIFTOKEN)
+            if (type == ScoopExpressionLexer.AVERAGEIFTOKEN || type == ScoopExpressionLexer.SUMIFTOKEN || type == ScoopExpressionLexer.COUNTIFTOKEN)
             {
                 Range criteriaValueRange = (Range) (expressions.size() == 2 ? expressions.get(0) : expressions.get(2));
                 if (criteriaValueRange == null) return new MemCell(FormulaError.VALUE);
@@ -191,7 +189,7 @@ public class MathFunction extends Function
                 valueSheet = criteriaValueRange.getSheet();
             } else
             {
-                if (type == HyperCellExpressionLexer.SUMIFSTOKEN || type == HyperCellExpressionLexer.AVERAGEIFSTOKEN || type == HyperCellExpressionLexer.MAXIFSTOKEN || type == HyperCellExpressionLexer.MINIFSTOKEN)
+                if (type == ScoopExpressionLexer.SUMIFSTOKEN || type == ScoopExpressionLexer.AVERAGEIFSTOKEN || type == ScoopExpressionLexer.MAXIFSTOKEN || type == ScoopExpressionLexer.MINIFSTOKEN)
                 {
                     start = 1;
                     Range sumRange = (Range) expressions.getFirst();
@@ -343,7 +341,7 @@ public class MathFunction extends Function
                 IntStream.range(0, maxValue).parallel().forEach(i -> {
                     if (finalTouched[i] && finalResults[i])
                     {
-                        if (type == HyperCellExpressionLexer.SUMIFSTOKEN || type == HyperCellExpressionLexer.SUMIFTOKEN || type == HyperCellExpressionLexer.AVERAGEIFTOKEN || type == HyperCellExpressionLexer.AVERAGEIFSTOKEN || type == HyperCellExpressionLexer.MAXIFSTOKEN || type == HyperCellExpressionLexer.MINIFSTOKEN)
+                        if (type == ScoopExpressionLexer.SUMIFSTOKEN || type == ScoopExpressionLexer.SUMIFTOKEN || type == ScoopExpressionLexer.AVERAGEIFTOKEN || type == ScoopExpressionLexer.AVERAGEIFSTOKEN || type == ScoopExpressionLexer.MAXIFSTOKEN || type == ScoopExpressionLexer.MINIFSTOKEN)
                         {
                             if (addresses != null)
                             {
@@ -370,7 +368,7 @@ public class MathFunction extends Function
             count = atomicCount.get();
             max = count > 0 ? atomicMax.get() : 0;
             min = count > 0 ? atomicMin.get() : 0;
-        } else if (type == HyperCellExpressionLexer.SUBTOTALTOKEN)
+        } else if (type == ScoopExpressionLexer.SUBTOTALTOKEN)
         {
             MemCell sttype = expressions.getFirst().calculateCellValue();
             if (sttype == null || sttype.getNumberValue() == null)
@@ -493,7 +491,7 @@ public class MathFunction extends Function
                     }
                     return new MemCell(s / count);
             }
-        } else if (type == HyperCellExpressionLexer.SUMPRODUCTTOKEN)
+        } else if (type == ScoopExpressionLexer.SUMPRODUCTTOKEN)
         {
             cc.setContainsAggregation(true);
             // Normal version with multiple ranges
@@ -604,23 +602,23 @@ public class MathFunction extends Function
                 }
             }
         }
-        if (type == HyperCellExpressionLexer.SUMTOKEN)
+        if (type == ScoopExpressionLexer.SUMTOKEN)
         {
             return getReturn(new MemCell(sum));
-        } else if (type == HyperCellExpressionLexer.COUNTTOKEN || type == HyperCellExpressionLexer.COUNTATOKEN)
+        } else if (type == ScoopExpressionLexer.COUNTTOKEN || type == ScoopExpressionLexer.COUNTATOKEN)
         {
             return getReturn(new MemCell(count));
-        } else if (type == HyperCellExpressionLexer.AVERAGETOKEN || type == HyperCellExpressionLexer.AVERAGEIFTOKEN || type == HyperCellExpressionLexer.AVERAGEIFSTOKEN)
+        } else if (type == ScoopExpressionLexer.AVERAGETOKEN || type == ScoopExpressionLexer.AVERAGEIFTOKEN || type == ScoopExpressionLexer.AVERAGEIFSTOKEN)
         {
             if (count == 0) return new MemCell(FormulaError.DIV0);
             return getReturn(new MemCell(sum / ((double) count)));
-        } else if (type == HyperCellExpressionLexer.MAXTOKEN)
+        } else if (type == ScoopExpressionLexer.MAXTOKEN)
         {
             return getReturn(new MemCell(max));
-        } else if (type == HyperCellExpressionLexer.MINTOKEN)
+        } else if (type == ScoopExpressionLexer.MINTOKEN)
         {
             return getReturn(new MemCell(min));
-        } else if (type == HyperCellExpressionLexer.STDEVTOKEN)
+        } else if (type == ScoopExpressionLexer.STDEVTOKEN)
         {
             double avg = sum / ((double) count);
             double sumsq = 0;
@@ -630,7 +628,7 @@ public class MathFunction extends Function
                 sumsq += diff * diff;
             }
             return getReturn(new MemCell(Math.sqrt((sumsq / ((double) count - 1)))));
-        } else if (type == HyperCellExpressionLexer.MEDIANTOKEN)
+        } else if (type == ScoopExpressionLexer.MEDIANTOKEN)
         {
             Collections.sort(values);
             if (values.isEmpty())
@@ -646,27 +644,27 @@ public class MathFunction extends Function
                 double val2 = values.get(values.size() / 2);
                 return getReturn(new MemCell((val1 + val2) / 2));
             }
-        } else if (type == HyperCellExpressionLexer.COUNTIFSTOKEN || type == HyperCellExpressionLexer.COUNTIFTOKEN)
+        } else if (type == ScoopExpressionLexer.COUNTIFSTOKEN || type == ScoopExpressionLexer.COUNTIFTOKEN)
         {
             return getReturn(new MemCell(count));
-        } else if (type == HyperCellExpressionLexer.SUMIFSTOKEN || type == HyperCellExpressionLexer.SUMIFTOKEN)
+        } else if (type == ScoopExpressionLexer.SUMIFSTOKEN || type == ScoopExpressionLexer.SUMIFTOKEN)
         {
             return getReturn(new MemCell(sum));
-        } else if (type == HyperCellExpressionLexer.MAXIFSTOKEN)
+        } else if (type == ScoopExpressionLexer.MAXIFSTOKEN)
         {
             return getReturn(max > Double.MIN_VALUE ? new MemCell(max) : new MemCell(FormulaError.NA));
-        } else if (type == HyperCellExpressionLexer.MINIFSTOKEN)
+        } else if (type == ScoopExpressionLexer.MINIFSTOKEN)
         {
             return getReturn(min < Double.MAX_VALUE ? new MemCell(min) : new MemCell(FormulaError.NA));
-        } else if (type == HyperCellExpressionLexer.SUMPRODUCTTOKEN)
+        } else if (type == ScoopExpressionLexer.SUMPRODUCTTOKEN)
         {
             return getReturn(new MemCell(sum));
-        } else if (type == HyperCellExpressionLexer.ABSTOKEN)
+        } else if (type == ScoopExpressionLexer.ABSTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null || mc.getNumberValue() == null) return getReturn(new MemCell(FormulaError.NA));
             else return getReturn(new MemCell(Math.abs(mc.getNumberValue().doubleValue())));
-        } else if (type == HyperCellExpressionLexer.SQRTTOKEN)
+        } else if (type == ScoopExpressionLexer.SQRTTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null || mc.getNumberValue() == null) return getReturn(new MemCell(FormulaError.NA));
@@ -676,7 +674,7 @@ public class MathFunction extends Function
                 if (num < 0) return getReturn(new MemCell(FormulaError.NUM));
                 return getReturn(new MemCell(Math.sqrt(mc.getNumberValue().doubleValue())));
             }
-        } else if (type == HyperCellExpressionLexer.CEILINGTOKEN)
+        } else if (type == ScoopExpressionLexer.CEILINGTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null) return getReturn(new MemCell(FormulaError.NA));
@@ -686,7 +684,7 @@ public class MathFunction extends Function
             double num = number.getNumberValue().doubleValue();
             double sig = significance.getNumberValue().doubleValue();
             return getReturn(new MemCell(Math.ceil(num / sig) * sig));
-        } else if (type == HyperCellExpressionLexer.FLOORTOKEN)
+        } else if (type == ScoopExpressionLexer.FLOORTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -697,12 +695,12 @@ public class MathFunction extends Function
             double sig = significance.getNumberValue().doubleValue();
             if (sig * num < 0) return new MemCell(FormulaError.NUM);
             return getReturn(new MemCell(Math.floor(num / sig) * sig));
-        } else if (type == HyperCellExpressionLexer.INTTOKEN)
+        } else if (type == ScoopExpressionLexer.INTTOKEN)
         {
             MemCell number = expressions.getFirst().calculateCellValue();
             if (number == null || number.getNumberValue() == null) return getReturn(new MemCell(FormulaError.NA));
             else return getReturn(new MemCell(Math.floor(number.getNumberValue().doubleValue())));
-        } else if (type == HyperCellExpressionLexer.MODTOKEN)
+        } else if (type == ScoopExpressionLexer.MODTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -713,7 +711,7 @@ public class MathFunction extends Function
             double result = num % div;
             if (result * div < 0) result = -result;
             return getReturn(new MemCell(result));
-        } else if (type == HyperCellExpressionLexer.POWERTOKEN)
+        } else if (type == ScoopExpressionLexer.POWERTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -723,7 +721,7 @@ public class MathFunction extends Function
             double pow = power.getNumberValue().doubleValue();
             double result = Math.pow(num, pow);
             return getReturn(new MemCell(result));
-        } else if (type == HyperCellExpressionLexer.ROUNDTOKEN)
+        } else if (type == ScoopExpressionLexer.ROUNDTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -736,7 +734,7 @@ public class MathFunction extends Function
             double result = Math.round(num * Math.pow(10, dig)) / Math.pow(10, dig);
             result *= signum;
             return getReturn(new MemCell(result));
-        } else if (type == HyperCellExpressionLexer.ROUNDUPTOKEN)
+        } else if (type == ScoopExpressionLexer.ROUNDUPTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -749,7 +747,7 @@ public class MathFunction extends Function
             double result = Math.ceil(num * Math.pow(10, dig)) / Math.pow(10, dig);
             result *= signum;
             return getReturn(new MemCell(result));
-        } else if (type == HyperCellExpressionLexer.ROUNDDOWNTOKEN)
+        } else if (type == ScoopExpressionLexer.ROUNDDOWNTOKEN)
         {
             MemCell number = expressions.get(0).calculateCellValue();
             if (number == null || number.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -762,7 +760,7 @@ public class MathFunction extends Function
             double result = Math.floor(num * Math.pow(10, dig)) / Math.pow(10, dig);
             result *= signum;
             return getReturn(new MemCell(result));
-        } else if (type == HyperCellExpressionLexer.RANDBETWEEN)
+        } else if (type == ScoopExpressionLexer.RANDBETWEEN)
         {
             MemCell bottom = expressions.get(0).calculateCellValue();
             if (bottom == null || bottom.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -772,7 +770,7 @@ public class MathFunction extends Function
             int topInt = top.getNumberValue().intValue();
             int value = (int) (Math.random() * (topInt + 1 - bottomInt) + bottomInt);
             return getReturn(new MemCell(value));
-        } else if (type == HyperCellExpressionLexer.TRUNCTOKEN)
+        } else if (type == ScoopExpressionLexer.TRUNCTOKEN)
         {
             MemCell number = expressions.getFirst().calculateCellValue();
             if (number == null || number.getNumberValue() == null) return new MemCell(FormulaError.NA);
@@ -800,7 +798,7 @@ public class MathFunction extends Function
                                                                                                   .isRefreshQueryDataOnUse())
         {
             // Populate data if necessary
-            CalculatedSourceWorkbook csw = new CalculatedSourceWorkbook(null, null, mcSheet.getWorkbook());
+            CalculatedSourceWorkbook csw = new CalculatedSourceWorkbook(cc.getSc(), null, mcSheet.getWorkbook());
             var queries = csw.getQueries(false, false);
             for (var iq : queries)
             {
@@ -825,7 +823,7 @@ public class MathFunction extends Function
 
     private boolean canPushDown()
     {
-        if (type == HyperCellExpressionLexer.COUNTIFSTOKEN || type == HyperCellExpressionLexer.SUMIFSTOKEN || type == HyperCellExpressionLexer.AVERAGEIFTOKEN || type == HyperCellExpressionLexer.AVERAGEIFSTOKEN)
+        if (type == ScoopExpressionLexer.COUNTIFSTOKEN || type == ScoopExpressionLexer.SUMIFSTOKEN || type == ScoopExpressionLexer.AVERAGEIFTOKEN || type == ScoopExpressionLexer.AVERAGEIFSTOKEN)
         {
 
         }

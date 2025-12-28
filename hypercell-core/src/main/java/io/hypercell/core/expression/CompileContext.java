@@ -2,13 +2,11 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
-import io.hypercell.api.FunctionRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import scoop.ScoopContext;
 import io.hypercell.core.grid.MemSheet;
 
 /**
@@ -18,15 +16,15 @@ public class CompileContext
 {
     private final List<Identifier> identifierList = new ArrayList<>();
     private final List<Range> rangeList = new ArrayList<>();
+    private ScoopContext sc;
     private MemSheet sheet;
-    private FunctionRegistry registry;
     private boolean informationalOnly = false;
     private boolean containsAggregation;
 
-    public CompileContext(MemSheet sheet, FunctionRegistry registry)
+    public CompileContext(ScoopContext sc, MemSheet sheet)
     {
+        this.sc = sc;
         this.sheet = sheet;
-        this.registry = registry;
     }
 
     public void addIdentifier(Identifier id)
@@ -83,8 +81,14 @@ public class CompileContext
         this.informationalOnly = informationalOnly;
     }
 
-    public FunctionRegistry getRegistry() {
-        return registry;
+    public ScoopContext getSc()
+    {
+        return sc;
+    }
+
+    public void setSc(ScoopContext sc)
+    {
+        this.sc = sc;
     }
 
     public void setContainsAggregation(boolean containsAggregation)

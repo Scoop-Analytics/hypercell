@@ -1,11 +1,9 @@
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import io.hypercell.core.datatable.AggregationRule;
-import io.hypercell.formula.HyperCellExpressionParser.ItemContext;
-import io.hypercell.formula.HyperCellExpressionParser.OffsetContext;
+import scoop.datatable.AggregationRule;
+import scoop.expression.ScoopExpressionParser.ItemContext;
+import scoop.expression.ScoopExpressionParser.OffsetContext;
 import scoop.metric.DataSetValue;
 import io.hypercell.api.CellAddress;
 import io.hypercell.core.grid.FormulaError;

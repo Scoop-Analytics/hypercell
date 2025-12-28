@@ -2,8 +2,6 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +9,11 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import io.hypercell.formula.HyperCellExpressionParser.CELLContext;
-import io.hypercell.formula.HyperCellExpressionParser.OFFSETContext;
-import io.hypercell.formula.HyperCellExpressionParser.REFContext;
-import io.hypercell.formula.HyperCellExpressionParser.RangeContext;
-import io.hypercell.formula.HyperCellExpressionParser.TablearrayContext;
+import scoop.expression.ScoopExpressionParser.CELLContext;
+import scoop.expression.ScoopExpressionParser.OFFSETContext;
+import scoop.expression.ScoopExpressionParser.REFContext;
+import scoop.expression.ScoopExpressionParser.RangeContext;
+import scoop.expression.ScoopExpressionParser.TablearrayContext;
 import io.hypercell.api.CellAddress;
 import io.hypercell.api.RangeAddress;
 import io.hypercell.core.grid.MemCell;

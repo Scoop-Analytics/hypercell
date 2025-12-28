@@ -2,8 +2,6 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -20,7 +18,7 @@ public class LogicalFunction extends Function
     public LogicalFunction(ParseTree tree, CompileContext cc)
     {
         super(tree, cc);
-        if (type == HyperCellExpressionParser.IFERRORTOKEN)
+        if (type == ScoopExpressionParser.IFERRORTOKEN)
         {
             spillArea = expressions.getFirst().possibleSpillRange();
             if (spillArea != null && expressions.size() > 1)
@@ -42,7 +40,7 @@ public class LogicalFunction extends Function
             }
         }
         MemCell memCellResult = null;
-        if (type == HyperCellExpressionParser.IFTOKEN)
+        if (type == ScoopExpressionParser.IFTOKEN)
         {
             if (expressions.isEmpty())
                 return new MemCell(FormulaError.NA);
@@ -62,7 +60,7 @@ public class LogicalFunction extends Function
                     memCellResult = expressions.get(2).calculateCellValue();
                 }
             }
-        } else if (type == HyperCellExpressionParser.IFSTOKEN)
+        } else if (type == ScoopExpressionParser.IFSTOKEN)
         {
             if (expressions.size() % 2 != 0)
             {
@@ -85,7 +83,7 @@ public class LogicalFunction extends Function
                     }
                 }
             }
-        } else if (type == HyperCellExpressionParser.IFERRORTOKEN)
+        } else if (type == ScoopExpressionParser.IFERRORTOKEN)
         {
             MemCell result = expressions.get(0).calculateCellValue();
             if (expressions.size()  < 2 || expressions.get(1) == null)
@@ -101,7 +99,7 @@ public class LogicalFunction extends Function
             {
                 memCellResult = result;
             }
-        } else if (type == HyperCellExpressionParser.IFNATOKEN)
+        } else if (type == ScoopExpressionParser.IFNATOKEN)
         {
             MemCell result = expressions.get(0).calculateCellValue();
             MemCell naResult = expressions.get(1).calculateCellValue();
@@ -112,13 +110,13 @@ public class LogicalFunction extends Function
             {
                 memCellResult = result;
             }
-        } else if (type == HyperCellExpressionParser.TRUETOKEN)
+        } else if (type == ScoopExpressionParser.TRUETOKEN)
         {
             memCellResult = new MemCell(1);
-        } else if (type == HyperCellExpressionParser.FALSETOKEN)
+        } else if (type == ScoopExpressionParser.FALSETOKEN)
         {
             memCellResult = new MemCell(0);
-        } else if (type == HyperCellExpressionParser.EQTOKEN)
+        } else if (type == ScoopExpressionParser.EQTOKEN)
         {
             MemCell exp0 = expressions.getFirst().calculateCellValue();
             MemCell exp1 = expressions.getFirst().calculateCellValue();
@@ -127,8 +125,8 @@ public class LogicalFunction extends Function
             else if (exp0 == null || exp1 == null)
                 memCellResult = new MemCell(0);
             else memCellResult = new MemCell(exp0.equals(exp1) ? 1 : 0);
-        } else if (type == HyperCellExpressionLexer.ANDTOKEN || type == HyperCellExpressionLexer.ORTOKEN
-                || type == HyperCellExpressionLexer.XORTOKEN)
+        } else if (type == ScoopExpressionLexer.ANDTOKEN || type == ScoopExpressionLexer.ORTOKEN
+                || type == ScoopExpressionLexer.XORTOKEN)
         {
             boolean bresult = false;
             boolean first = true;
@@ -148,20 +146,20 @@ public class LogicalFunction extends Function
                     first = false;
                 } else
                 {
-                    if (type == HyperCellExpressionLexer.ANDTOKEN)
+                    if (type == ScoopExpressionLexer.ANDTOKEN)
                         bresult = bresult && newVal;
-                    else if (type == HyperCellExpressionLexer.ORTOKEN)
+                    else if (type == ScoopExpressionLexer.ORTOKEN)
                         bresult = bresult || newVal;
-                    else if (type == HyperCellExpressionLexer.XORTOKEN)
+                    else if (type == ScoopExpressionLexer.XORTOKEN)
                         bresult = bresult ^ newVal;
                 }
-                if (type == HyperCellExpressionLexer.ANDTOKEN && !bresult)
+                if (type == ScoopExpressionLexer.ANDTOKEN && !bresult)
                     break;
-                if (type == HyperCellExpressionLexer.ORTOKEN && bresult)
+                if (type == ScoopExpressionLexer.ORTOKEN && bresult)
                     break;
             }
             memCellResult = new MemCell(bresult ? 1 : 0);
-        } else if (type == HyperCellExpressionLexer.NOTTOKEN)
+        } else if (type == ScoopExpressionLexer.NOTTOKEN)
         {
             MemCell result = expressions.getFirst().calculateCellValue();
             if (result == null)

@@ -2,13 +2,11 @@
  *
  */
 package io.hypercell.core.expression;
-import io.hypercell.formula.HyperCellExpressionParser;
-import io.hypercell.formula.HyperCellExpressionLexer;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import io.hypercell.core.util.FormattingUtils;
-import io.hypercell.core.dateparser.DateAnalyzer;
+import scoop.datagrid.ExcelDataGrid;
+import scoop.dateparser.DateAnalyzer;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 
@@ -20,7 +18,7 @@ public class InformationFunction extends Function
     public InformationFunction(ParseTree tree, CompileContext cc)
     {
         super(tree, cc);
-        if (type == HyperCellExpressionLexer.TABLETOKEN)
+        if (type == ScoopExpressionLexer.TABLETOKEN)
         {
             cc.setInformationalOnly(true);
         }
@@ -37,43 +35,43 @@ public class InformationFunction extends Function
                 return cacheValue;
             }
         }
-        if (type == HyperCellExpressionParser.ISNUMBERTOKEN)
+        if (type == ScoopExpressionParser.ISNUMBERTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null || mc.getNumberValue() == null || mc.getErrorValue() != null)
                 return getReturn(new MemCell(0));
             return getReturn(new MemCell(mc.getNumberValue() != null ? 1 : 0));
-        } else if (type == HyperCellExpressionParser.ISTEXTTOKEN)
+        } else if (type == ScoopExpressionParser.ISTEXTTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null || mc.getStringValue() == null || mc.getErrorValue() != null)
                 return getReturn(new MemCell(0));
             return getReturn(new MemCell(mc.getStringValue() != null ? 1 : 0));
-        } else if (type == HyperCellExpressionParser.ISNONTEXTTOKEN)
+        } else if (type == ScoopExpressionParser.ISNONTEXTTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null || mc.getStringValue() == null || mc.getErrorValue() != null)
                 return getReturn(new MemCell(1));
             return getReturn(new MemCell(mc.getStringValue() != null ? 0 : 1));
-        } else if (type == HyperCellExpressionParser.ISNATOKEN)
+        } else if (type == ScoopExpressionParser.ISNATOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc != null && mc.getErrorValue() != null && mc.getErrorValue() == FormulaError.NA)
                 return getReturn(new MemCell(1));
             return getReturn(new MemCell(0));
-        } else if (type == HyperCellExpressionParser.ISERRTOKEN)
+        } else if (type == ScoopExpressionParser.ISERRTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc.getErrorValue() != null && mc.getErrorValue() != FormulaError.NA)
                 return getReturn(new MemCell(1));
             return getReturn(new MemCell(0));
-        } else if (type == HyperCellExpressionParser.ISERRORTOKEN)
+        } else if (type == ScoopExpressionParser.ISERRORTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc.getErrorValue() != null)
                 return getReturn(new MemCell(1));
             return getReturn(new MemCell(0));
-        } else if (type == HyperCellExpressionParser.ISBLANKTOKEN)
+        } else if (type == ScoopExpressionParser.ISBLANKTOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null || (mc.getStringValue() == null && mc.getNumberValue() == null))
@@ -81,7 +79,7 @@ public class InformationFunction extends Function
                 return getReturn(new MemCell(1));
             }
             return getReturn(new MemCell(0));
-        } else if (type == HyperCellExpressionParser.ISDATETOKEN)
+        } else if (type == ScoopExpressionParser.ISDATETOKEN)
         {
             MemCell mc = expressions.getFirst().calculateCellValue();
             if (mc == null)
@@ -101,7 +99,7 @@ public class InformationFunction extends Function
                 }
                 return getReturn(new MemCell(0));
             }
-            if (FormattingUtils.isExcelDateFormat(mc.getFormatString()))
+            if (ExcelDataGrid.isExcelDateFormat(mc.getFormatString()))
             {
                 return getReturn(new MemCell(1));
             }
