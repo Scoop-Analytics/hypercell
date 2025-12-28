@@ -4,9 +4,34 @@ This guide explains how to migrate Scoop Analytics from the legacy tightly-coupl
 
 ## Overview
 
-The new architecture separates concerns:
-- **`oss/`** - Pure open-source HyperCell calculation engine (no Scoop references)
-- **`hypercell-bridge/`** - Integration layer with Scoop-specific adapters
+The new architecture cleanly separates concerns:
+
+| Layer | Purpose | Dependencies |
+|-------|---------|--------------|
+| `oss/` | Pure open-source HyperCell engine | None (self-contained) |
+| `hypercell-bridge/` | Integration adapters for Scoop | Depends on `oss/` |
+| Scoop Application | Business logic with HyperCell | Uses `hypercell-bridge/` |
+
+## Migration at a Glance
+
+```
+BEFORE (Tight Coupling)              AFTER (Bridge-Based)
+┌─────────────────────┐              ┌─────────────────────┐
+│  Scoop Application  │              │  Scoop Application  │
+│  ┌───────────────┐  │              │  ┌───────────────┐  │
+│  │  MemWorkbook  │  │              │  │ ScoopCallbacks│  │
+│  │   (with sc)   │  │    ──────>   │  │   .builder()  │  │
+│  └───────────────┘  │              │  └───────────────┘  │
+│  workbook.          │              │          ▼          │
+│   setScoopContext() │              │  ┌───────────────┐  │
+└─────────────────────┘              │  │ScoopIntegration│  │
+                                     │  └───────────────┘  │
+                                     │          ▼          │
+                                     │  ┌───────────────┐  │
+                                     │  │ExtendedWorkbook│  │
+                                     │  └───────────────┘  │
+                                     └─────────────────────┘
+```
 
 ## Quick Start
 
@@ -103,7 +128,7 @@ extWorkbook.calculate();
 
 ### Required Callbacks
 
-None - all callbacks have sensible defaults.
+**None** - all callbacks have sensible defaults.
 
 ### Recommended Callbacks
 
@@ -177,6 +202,24 @@ ScoopIntegration integration = new ScoopIntegration(callbacks);
 EvaluationContext context = integration.getContext();
 ```
 
+### 4. Cell Value Access via ExtendedWorkbook
+
+**Before:**
+```java
+MemCell cell = workbook.getSheet("Sheet1").getCellAt(0, 0);
+Object value = cell.getValue();
+```
+
+**After:**
+```java
+// Option 1: Via ExtendedWorkbook (recommended)
+Object value = extWorkbook.getCellValue("Sheet1", 0, 0);
+
+// Option 2: Access underlying workbook
+MemWorkbook underlying = extWorkbook.getWorkbook();
+MemCell cell = underlying.getSheet("Sheet1").getCellAt(0, 0);
+```
+
 ## Testing the Migration
 
 ```java
@@ -188,6 +231,7 @@ void testMigration() {
     // Create integration with test callbacks
     ScoopCallbacks callbacks = ScoopCallbacks.builder()
         .userId(() -> "testUser")
+        .tenantId(() -> "testOrg")
         .build();
 
     ScoopIntegration integration = new ScoopIntegration(callbacks);
@@ -206,10 +250,19 @@ void testMigration() {
 
 ### Query sheets not refreshing
 
-Ensure you've provided a `queryRefresher` callback and that `setAutoRefreshQueries(true)` is called:
+Ensure you've provided a `queryRefresher` callback and enabled auto-refresh:
 
 ```java
-extWorkbook.setAutoRefreshQueries(true);
+ScoopCallbacks callbacks = ScoopCallbacks.builder()
+    .queryRefresher((wb, sheet) -> {
+        // Your refresh logic here
+        return true;  // Return true on success
+    })
+    .build();
+
+ExtendedWorkbook workbook = integration.createWorkbook(memWorkbook);
+workbook.setAutoRefreshQueries(true);  // Don't forget this!
+workbook.calculate();
 ```
 
 ### User/tenant context is null
@@ -228,11 +281,58 @@ ScoopCallbacks callbacks = ScoopCallbacks.builder()
 Ensure the workbook is properly loaded with formulas compiled:
 
 ```java
-MemWorkbook workbook = new MemWorkbook(file, poiWorkbook, true);  // true = load formulas
+// The third parameter (true) enables formula loading
+MemWorkbook workbook = new MemWorkbook(file, poiWorkbook, true);
 workbook.calculate();  // Compiles and evaluates
 ```
 
+### Permission checks always pass
+
+Provide a permission checker:
+
+```java
+ScoopCallbacks callbacks = ScoopCallbacks.builder()
+    .permissionChecker(perm -> sc.hasPermission(perm))
+    .build();
+```
+
+### External references not resolving
+
+Provide a reference resolver:
+
+```java
+ScoopCallbacks callbacks = ScoopCallbacks.builder()
+    .referenceResolver((name, context) -> {
+        // Look up external reference by name
+        return externalDataStore.get(name);
+    })
+    .build();
+```
+
+## Validation
+
+After migration, verify using cross-validation tests:
+
+```bash
+./gradlew :hypercell-bridge:test
+```
+
+All 8 integration tests should pass:
+- Basic integration workflow
+- Query sheet refresh
+- Permission checking
+- Data source access
+- External reference resolution
+- Cell value operations
+- Default callbacks
+- Multi-sheet workbooks
+
 ## Support
 
-For issues, see the bridge module tests in:
-`hypercell-bridge/src/test/java/io/hypercell/bridge/scoop/ScoopIntegrationTest.java`
+For issues, see:
+- Bridge tests: `hypercell-bridge/src/test/java/io/hypercell/bridge/scoop/ScoopIntegrationTest.java`
+- README: [hypercell-bridge/README.md](README.md)
+
+---
+
+*Part of the [HyperCell](../) project by [Scoop Analytics](https://scoopanalytics.com).*
