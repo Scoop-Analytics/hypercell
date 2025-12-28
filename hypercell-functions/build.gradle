@@ -1,4 +1,0 @@
-dependencies {
-    api project(':hypercell-api')
-    implementation project(':hypercell-formula')
-}
