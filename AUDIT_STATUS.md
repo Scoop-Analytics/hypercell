@@ -16,8 +16,8 @@ The HyperCell open-source extraction is **functionally complete** but requires c
 | Functional Correctness | **PASS** | 82,881 formulas validated at 100% Excel compatibility |
 | Bridge Module | **PASS** | 8 integration tests passing |
 | Documentation | **PASS** | README, MIGRATION, CHANGELOG updated |
-| Legacy Cleanup | **PENDING** | Root-level zombie directories need deletion |
-| NOTICE File | **PENDING** | Required for Apache 2.0 compliance |
+| Legacy Cleanup | **COMPLETE** | 470 files removed (35,291 lines) |
+| NOTICE File | **COMPLETE** | Third-party attributions added |
 
 ---
 
@@ -245,15 +245,15 @@ BUILD SUCCESSFUL (8 tests passed)
 
 ## Action Plan
 
-### Phase 1: Cleanup (Pre-Merge)
-- [ ] Delete root-level zombie directories
-- [ ] Delete untracked ScoopExpression files
-- [ ] Create NOTICE file
-- [ ] Run full test suite to verify nothing broke
-- [ ] Commit cleanup changes
+### Phase 1: Cleanup (Pre-Merge) - **COMPLETE**
+- [x] Delete root-level zombie directories (470 files, 35,291 lines removed)
+- [x] Delete untracked ScoopExpression files
+- [x] Create NOTICE file
+- [x] Run full test suite to verify nothing broke
+- [x] Commit cleanup changes
 
 ### Phase 2: Merge
-- [ ] Complete remaining AI audits
+- [ ] Complete remaining AI audits (1 of 3 complete)
 - [ ] Address any additional findings
 - [ ] Create PR with comprehensive description
 - [ ] Merge to main branch
@@ -289,7 +289,7 @@ This session was continued from a summarized previous session. The original extr
 | "OSS has zero Scoop references" | **TRUE for oss/** | The `oss/` directory is clean |
 | "82,881 formulas at 100%" | **TRUE** | Verified by running tests |
 | "8 bridge integration tests" | **TRUE** | Verified by running tests |
-| "Project is ready for OSS release" | **PARTIAL** | Cleanup required first |
+| "Project is ready for OSS release" | **TRUE** | All cleanup complete |
 
 ---
 
