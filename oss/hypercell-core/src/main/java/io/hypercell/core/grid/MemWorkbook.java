@@ -552,7 +552,7 @@ public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
         kryo.register(FormulaError.class);
         kryo.register(io.hypercell.api.CellAddress.class);
         kryo.register(io.hypercell.api.RangeAddress.class);
-        // kryo.register(scoop.worksheet.memsheet.ScoopSheetObject.class);
+        // Reserved for future extension point registration
         kryo.register(org.apache.poi.ss.usermodel.BorderStyle.class);
         kryo.register(org.apache.poi.ss.usermodel.HorizontalAlignment.class);
         kryo.register(org.apache.poi.ss.usermodel.VerticalAlignment.class);

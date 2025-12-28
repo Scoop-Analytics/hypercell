@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 /**
  * Test to verify that the HyperCell formula evaluation framework works
- * after extraction from Scoop.
+ * correctly for common Excel formulas.
  */
 public class FormulaEvaluationTest {
 

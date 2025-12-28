@@ -25,26 +25,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Cross-validation test that verifies HyperCell produces the same calculation
- * results as the original Scoop implementation.
+ * results as Microsoft Excel.
  *
- * This test loads Excel test files from the Scoop project and validates that
- * HyperCell's MemWorkbook/MemSheet/MemCell classes produce identical results.
+ * This test loads Excel test files and validates that HyperCell's
+ * MemWorkbook/MemSheet/MemCell classes produce identical results to Excel's
+ * cached formula values.
  */
 public class CrossValidationTest {
 
-    // Path to Scoop's test sheets directory
-    private static final String SCOOP_TEST_SHEETS = "/home/bradpeters/dev/scoop/app/src/test/resources/testsheets";
+    // Path to Excel test sheets directory (configure via environment or hardcode for local testing)
+    private static final String TEST_SHEETS_DIR = System.getProperty("hypercell.testsheets",
+            "/home/bradpeters/dev/scoop/app/src/test/resources/testsheets");
 
     /**
-     * Main validation test - loads all Excel files from Scoop test directory
-     * and validates that HyperCell produces the same results.
+     * Main validation test - loads all Excel files from test directory
+     * and validates that HyperCell produces the same results as Excel.
      */
     @Test
-    public void testHyperCellMatchesScoopCalculations() {
-        Path dir = Path.of(SCOOP_TEST_SHEETS);
+    public void testHyperCellMatchesExcelCalculations() {
+        Path dir = Path.of(TEST_SHEETS_DIR);
 
         if (!Files.exists(dir)) {
-            System.err.println("WARNING: Scoop test directory not found: " + dir);
+            System.err.println("WARNING: Test sheets directory not found: " + dir);
             System.err.println("Skipping cross-validation test.");
             return;
         }
@@ -303,7 +305,7 @@ public class CrossValidationTest {
 
         if (totalMismatches == 0) {
             System.out.println("✅ SUCCESS: All calculations match!");
-            System.out.println("   HyperCell produces identical results to Scoop.");
+            System.out.println("   HyperCell produces identical results to Excel.");
         } else {
             System.out.println("❌ FAILURE: " + totalMismatches + " mismatches detected");
             System.out.println();

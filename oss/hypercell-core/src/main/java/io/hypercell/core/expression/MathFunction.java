@@ -793,7 +793,7 @@ public class MathFunction extends Function
     private void populateIfNecessary(MemCell mc)
     {
         // Extension point: Override in subclass to populate query sheets on demand
-        // In Scoop Analytics, this refreshes data from external sources before calculation
+        // Enterprise integrations can refresh data from external sources before calculation
     }
 
     private MemCell getReturn(MemCell result)
