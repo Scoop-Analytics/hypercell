@@ -1,6 +1,6 @@
 # HyperCell OSS Extraction - Audit Status
 
-**Last Updated**: December 27, 2025
+**Last Updated**: December 30, 2025
 **Branch**: `feature/pluggable-language-exploration`
 **Audit Phase**: Complete (3 of 3 AI audits finished)
 
@@ -295,10 +295,12 @@ BUILD SUCCESSFUL (8 tests passed)
 - [x] Create NOTICE file
 - [x] Run full test suite to verify nothing broke
 - [x] Commit cleanup changes
+- [x] Remove empty zombie directories at root (cosmetic - git doesn't track empty dirs)
 
-### Phase 2: Audit & Merge - **COMPLETE**
+### Phase 2: Audit & Merge - **IN PROGRESS**
 - [x] Complete AI audits (3 of 3 complete, avg score: 93%)
 - [x] Address all findings (documentation, cleanup, licensing)
+- [x] Fix hardcoded path in `CrossValidationTest.java` (now uses env var / system property)
 - [ ] Create PR with comprehensive description
 - [ ] Merge to main branch
 
@@ -306,6 +308,7 @@ BUILD SUCCESSFUL (8 tests passed)
 - [ ] Tag v0.1.0
 - [ ] Create GitHub release
 - [ ] Publish to Maven Central (optional)
+- [ ] Create CONTRIBUTING.md (optional - helps external contributors)
 
 ### Phase 4: Scoop Integration
 - [ ] Wire up hypercell-bridge in Scoop codebase

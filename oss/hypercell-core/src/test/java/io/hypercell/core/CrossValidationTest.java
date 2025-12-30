@@ -33,9 +33,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class CrossValidationTest {
 
-    // Path to Excel test sheets directory (configure via environment or hardcode for local testing)
+    // Path to Excel test sheets directory
+    // Configure via: -Dhypercell.testsheets=/path/to/testsheets
+    // Or set HYPERCELL_TESTSHEETS environment variable
+    // Test gracefully skips if not configured
     private static final String TEST_SHEETS_DIR = System.getProperty("hypercell.testsheets",
-            "/home/bradpeters/dev/scoop/app/src/test/resources/testsheets");
+            System.getenv("HYPERCELL_TESTSHEETS"));
 
     /**
      * Main validation test - loads all Excel files from test directory
@@ -43,6 +46,13 @@ public class CrossValidationTest {
      */
     @Test
     public void testHyperCellMatchesExcelCalculations() {
+        if (TEST_SHEETS_DIR == null || TEST_SHEETS_DIR.isEmpty()) {
+            System.err.println("WARNING: Test sheets directory not configured.");
+            System.err.println("Set -Dhypercell.testsheets=/path/to/testsheets or HYPERCELL_TESTSHEETS env var.");
+            System.err.println("Skipping cross-validation test.");
+            return;
+        }
+
         Path dir = Path.of(TEST_SHEETS_DIR);
 
         if (!Files.exists(dir)) {
