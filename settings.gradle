@@ -1,5 +1,14 @@
 rootProject.name = 'hypercell'
-include 'hypercell-api'
-include 'hypercell-formula'
-include 'hypercell-functions'
-include 'hypercell-core'
+
+// Include the OSS modules (self-contained open-source distribution)
+includeBuild('oss') {
+    dependencySubstitution {
+        substitute module('io.hypercell:hypercell-api') using project(':hypercell-api')
+        substitute module('io.hypercell:hypercell-core') using project(':hypercell-core')
+        substitute module('io.hypercell:hypercell-formula') using project(':hypercell-formula')
+        substitute module('io.hypercell:hypercell-functions') using project(':hypercell-functions')
+    }
+}
+
+// Include the bridge module (enterprise integration layer)
+include 'hypercell-bridge'

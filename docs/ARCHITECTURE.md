@@ -27,6 +27,16 @@ When a workbook is loaded (Hydrated), HyperCell iterates through every formula c
 2.  **Build Dependency Graph**: As it parses `=A1+B1`, it registers the current cell as a "dependent" of `A1` and `B1`.
 3.  **Compile to Expression**: The AST is converted into a tree of `Expression` objects (e.g., `SumFunction`, `CellReference`, `NumberConstant`).
 
+### Pluggable Compiler Architecture
+
+The compilation phase uses a **delegate pattern** for extensibility:
+
+*   **`CompilerDelegate`** (interface): Defines how AST nodes are converted to `Expression` objects.
+*   **`StandardCompilerDelegate`**: The default implementation handling standard Excel syntax.
+*   **Custom Delegates**: Consumers can provide their own delegates to handle proprietary syntax (e.g., `SCOOPLOOKUP`).
+
+This enables grammar extension without forking the core engine. See `docs/STRATEGY_PLUGGABLE_LANGUAGE.md` for details.
+
 ## 4. The Execution Phase
 
 Calculation is triggered when a cell value changes.
@@ -48,3 +58,15 @@ This allows you to inject:
 *   **Database Lookups**: A custom function that queries SQL.
 *   **API Calls**: A function that hits a REST endpoint.
 *   **Machine Learning**: A function that runs an inference model.
+
+## 6. Expression Engine (`io.hypercell.core.expression`)
+
+The expression engine contains all function implementations, refactored from the original Scoop codebase:
+
+*   **`io.hypercell.core.expression.*`**: Battle-tested function implementations (`MathFunction`, `LookupFunction`, `LogicalFunction`, `TextualFunction`, etc.).
+*   **`io.hypercell.core.grid.*`**: Grid infrastructure (`MemWorkbook`, `MemSheet`, `MemCell`).
+*   **`io.hypercell.api.*`**: Public interfaces (`EvaluationContext`, `FunctionRegistry`, `Expression`).
+
+### Compatibility Stubs
+
+Some hollow `scoop.*` stub classes remain for compile compatibility with proprietary Scoop functions. These are documented in `docs/STUB_CLEANUP_PLAN.md` for future cleanup.

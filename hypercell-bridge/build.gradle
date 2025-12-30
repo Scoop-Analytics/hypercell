@@ -1,0 +1,16 @@
+/**
+ * HyperCell Bridge Module
+ *
+ * This module provides extension points and adapters to connect the
+ * open-source HyperCell calculation engine to enterprise platforms
+ * like Scoop Analytics.
+ */
+
+dependencies {
+    // Depend on the OSS HyperCell modules (resolved via composite build)
+    api 'io.hypercell:hypercell-core:0.1.0'
+    api 'io.hypercell:hypercell-api:0.1.0'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+}
