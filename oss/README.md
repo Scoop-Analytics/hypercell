@@ -280,7 +280,7 @@ Contributions are welcome! Please:
 ## Links
 
 - **Parent Project**: [HyperCell](../)
-- **Issues**: [GitHub Issues](https://github.com/scoopeng/hypercell/issues)
+- **Issues**: [GitHub Issues](https://github.com/Scoop-Analytics/hypercell/issues)
 - **Scoop Analytics**: [scoopanalytics.com](https://scoopanalytics.com)
 
 ---

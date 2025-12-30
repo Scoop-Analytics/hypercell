@@ -40,7 +40,7 @@ subprojects {
                 pom {
                     name = project.name
                     description = 'The High-Performance, In-Memory Java Calculation Graph'
-                    url = 'https://github.com/scoopanalytics/hypercell'
+                    url = 'https://github.com/Scoop-Analytics/hypercell'
                     licenses {
                         license {
                             name = 'The Apache License, Version 2.0'
@@ -55,9 +55,9 @@ subprojects {
                         }
                     }
                     scm {
-                        connection = 'scm:git:git://github.com/scoopanalytics/hypercell.git'
-                        developerConnection = 'scm:git:ssh://github.com/scoopanalytics/hypercell.git'
-                        url = 'https://github.com/scoopanalytics/hypercell'
+                        connection = 'scm:git:git://github.com/Scoop-Analytics/hypercell.git'
+                        developerConnection = 'scm:git:ssh://github.com/Scoop-Analytics/hypercell.git'
+                        url = 'https://github.com/Scoop-Analytics/hypercell'
                     }
                 }
             }

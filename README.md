@@ -2,7 +2,7 @@
 
 **The High-Performance, In-Memory Excel Calculation Engine for Java**
 
-[![Build Status](https://github.com/scoopeng/hypercell/actions/workflows/ci.yml/badge.svg)](https://github.com/scoopeng/hypercell/actions)
+[![Build Status](https://github.com/Scoop-Analytics/hypercell/actions/workflows/ci.yml/badge.svg)](https://github.com/Scoop-Analytics/hypercell/actions)
 [![Java 21+](https://img.shields.io/badge/Java-21%2B-blue.svg)](https://openjdk.org/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
