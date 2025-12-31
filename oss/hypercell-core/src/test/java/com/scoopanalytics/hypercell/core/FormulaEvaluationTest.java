@@ -5,9 +5,9 @@ import com.scoopanalytics.hypercell.core.grid.MemSheet;
 import com.scoopanalytics.hypercell.core.grid.MemCell;
 import com.scoopanalytics.hypercell.core.expression.Compile;
 import com.scoopanalytics.hypercell.api.Expression;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test to verify that the HyperCell formula evaluation framework works
@@ -29,10 +29,10 @@ public class FormulaEvaluationTest {
         MemCell a1 = sheet.getCellAt(0, 0);
         MemCell b1 = sheet.getCellAt(0, 1);
 
-        assertNotNull("A1 should not be null", a1);
-        assertNotNull("B1 should not be null", b1);
-        assertEquals("A1 should be 10", 10.0, a1.getNumberValue().doubleValue(), 0.001);
-        assertEquals("B1 should be 20", 20.0, b1.getNumberValue().doubleValue(), 0.001);
+        assertNotNull(a1, "A1 should not be null");
+        assertNotNull(b1, "B1 should not be null");
+        assertEquals(10.0, a1.getNumberValue().doubleValue(), 0.001, "A1 should be 10");
+        assertEquals(20.0, b1.getNumberValue().doubleValue(), 0.001, "B1 should be 20");
 
         System.out.println("✅ Basic cell storage works!");
         System.out.println("   A1 = " + a1.getNumberValue());
@@ -67,8 +67,8 @@ public class FormulaEvaluationTest {
         MemCell numCell = sheet.getCellAt(0, 0);
         MemCell textCell = sheet.getCellAt(1, 0);
 
-        assertNotNull("Number cell should exist", numCell.getNumberValue());
-        assertNotNull("Text cell should exist", textCell.getStringValue());
+        assertNotNull(numCell.getNumberValue(), "Number cell should exist");
+        assertNotNull(textCell.getStringValue(), "Text cell should exist");
 
         System.out.println("✅ Information functions (ISNUMBER, ISTEXT) available");
     }
@@ -81,8 +81,8 @@ public class FormulaEvaluationTest {
         MemSheet sheet1 = wb.createSheet("Sheet1");
         MemSheet sheet2 = wb.createSheet("Sheet2");
 
-        assertNotNull("Sheet1 should be created", sheet1);
-        assertNotNull("Sheet2 should be created", sheet2);
+        assertNotNull(sheet1, "Sheet1 should be created");
+        assertNotNull(sheet2, "Sheet2 should be created");
 
         // Set values in different sheets
         sheet1.setCellAt(0, 0, new MemCell(100.0));
@@ -109,9 +109,9 @@ public class FormulaEvaluationTest {
 
         MemCell arrayCell = new MemCell(array);
 
-        assertNotNull("Array cell should be created", arrayCell);
-        assertNotNull("Array should be accessible", arrayCell.getArray());
-        assertEquals("Array should be 2x2", 2, arrayCell.getArray().length);
+        assertNotNull(arrayCell, "Array cell should be created");
+        assertNotNull(arrayCell.getArray(), "Array should be accessible");
+        assertEquals(2, arrayCell.getArray().length, "Array should be 2x2");
 
         System.out.println("✅ Array formulas supported!");
     }
