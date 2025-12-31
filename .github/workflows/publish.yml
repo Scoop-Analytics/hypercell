@@ -1,0 +1,62 @@
+name: Publish to Maven Central
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 0.1.0)'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Set version from release tag
+      if: github.event_name == 'release'
+      run: |
+        VERSION=${GITHUB_REF_NAME#v}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Set version from input
+      if: github.event_name == 'workflow_dispatch'
+      run: echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+
+    - name: Build
+      run: ./gradlew clean build -Pversion=${{ env.VERSION }}
+
+    - name: Publish to Maven Central
+      run: ./gradlew publishMavenJavaPublicationToMavenCentralRepository -Pversion=${{ env.VERSION }}
+      env:
+        MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Upload JARs as release assets
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          hypercell-api/build/libs/*.jar
+          hypercell-core/build/libs/*.jar
+          hypercell-formula/build/libs/*.jar
+          hypercell-functions/build/libs/*.jar
