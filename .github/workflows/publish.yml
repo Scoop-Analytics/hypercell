@@ -43,13 +43,24 @@ jobs:
     - name: Build
       run: ./gradlew clean build -Pversion=${{ env.VERSION }}
 
-    - name: Publish to Maven Central
-      run: ./gradlew publishMavenJavaPublicationToMavenCentralRepository -Pversion=${{ env.VERSION }}
+    - name: Publish to Local Maven and Sign
+      run: ./gradlew publishMavenJavaPublicationToMavenLocal -Pversion=${{ env.VERSION }}
       env:
-        MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
         GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Create Bundle for Central Portal
+      run: |
+        cd ~/.m2/repository
+        zip -r $GITHUB_WORKSPACE/bundle.zip com/scoopanalytics/hypercell
+
+    - name: Upload to Sonatype Central Portal
+      run: |
+        curl --request POST \
+          --verbose \
+          --header "Authorization: Bearer ${{ secrets.MAVEN_USERNAME }}:${{ secrets.MAVEN_PASSWORD }}" \
+          --form bundle=@bundle.zip \
+          "https://central.sonatype.com/api/v1/publisher/upload?name=hypercell-${{ env.VERSION }}&publishingType=AUTOMATIC"
 
     - name: Upload JARs as release assets
       if: github.event_name == 'release'

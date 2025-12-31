@@ -68,8 +68,8 @@ subprojects {
         }
         repositories {
             maven {
-                name = "MavenCentral"
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                name = "SonatypeCentralPortal"
+                url = uri("https://central.sonatype.com/api/v1/publisher/upload")
                 credentials {
                     username = System.getenv("MAVEN_USERNAME") ?: project.findProperty("maven.username") ?: ""
                     password = System.getenv("MAVEN_PASSWORD") ?: project.findProperty("maven.password") ?: ""
@@ -93,5 +93,20 @@ subprojects {
             useInMemoryPgpKeys(signingKey, signingPassword)
             sign publishing.publications.mavenJava
         }
+    }
+}
+
+// Task to create bundle zip for Central Portal upload
+tasks.register('createCentralBundle', Zip) {
+    dependsOn subprojects.collect { it.tasks.named('publishMavenJavaPublicationToMavenLocal') }
+
+    archiveFileName = "hypercell-bundle-${version}.zip"
+    destinationDirectory = file("${buildDir}/bundle")
+
+    from "${System.getProperty('user.home')}/.m2/repository/com/scoopanalytics/hypercell"
+
+    doFirst {
+        // Ensure we publish to local maven first
+        println "Creating bundle from local maven repository..."
     }
 }
