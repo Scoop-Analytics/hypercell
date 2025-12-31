@@ -1,0 +1,97 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+allprojects {
+    group = 'com.scoopanalytics.hypercell'
+    version = '0.1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        implementation 'org.slf4j:slf4j-api:2.0.9'
+    }
+
+    test {
+        useJUnitPlatform()
+        maxHeapSize = '2g'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                pom {
+                    name = project.name
+                    description = 'HyperCell - High-Performance In-Memory Excel Calculation Engine'
+                    url = 'https://github.com/Scoop-Analytics/hypercell'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'scoopanalytics'
+                            name = 'Scoop Analytics'
+                            email = 'info@scoopanalytics.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/Scoop-Analytics/hypercell.git'
+                        developerConnection = 'scm:git:ssh://github.com/Scoop-Analytics/hypercell.git'
+                        url = 'https://github.com/Scoop-Analytics/hypercell'
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                name = "MavenCentral"
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME") ?: project.findProperty("maven.username") ?: ""
+                    password = System.getenv("MAVEN_PASSWORD") ?: project.findProperty("maven.password") ?: ""
+                }
+            }
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/Scoop-Analytics/hypercell")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") ?: ""
+                    password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key") ?: ""
+                }
+            }
+        }
+    }
+
+    signing {
+        def signingKey = System.getenv("GPG_PRIVATE_KEY")
+        def signingPassword = System.getenv("GPG_PASSPHRASE") ?: ""
+        if (signingKey) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+            sign publishing.publications.mavenJava
+        }
+    }
+}

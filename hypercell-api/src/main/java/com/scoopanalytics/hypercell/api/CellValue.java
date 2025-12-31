@@ -1,0 +1,13 @@
+package com.scoopanalytics.hypercell.api;
+
+public interface CellValue {
+    enum Type { STRING, NUMBER, BOOLEAN, ERROR, EMPTY, ARRAY }
+    
+    Type getType();
+    Object getValue();
+    
+    String getStringValue();
+    Number getNumberValue();
+    Boolean getBooleanValue();
+    CellValue[][] getArrayValue();
+}
