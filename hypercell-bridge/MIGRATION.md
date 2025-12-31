@@ -41,7 +41,7 @@ In Scoop's `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation 'io.hypercell:hypercell-bridge:0.1.0-SNAPSHOT'
+    implementation 'com.scoopanalytics.hypercell:hypercell-bridge:0.1.0-SNAPSHOT'
 }
 ```
 
@@ -50,9 +50,9 @@ dependencies {
 Replace direct usage of `MemWorkbook` with the bridge integration:
 
 ```java
-import io.hypercell.bridge.scoop.ScoopCallbacks;
-import io.hypercell.bridge.scoop.ScoopIntegration;
-import io.hypercell.bridge.ExtendedWorkbook;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopCallbacks;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopIntegration;
+import com.scoopanalytics.hypercell.bridge.ExtendedWorkbook;
 
 public class HyperCellIntegration {
     private final ScoopContext sc;

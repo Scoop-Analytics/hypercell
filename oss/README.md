@@ -22,7 +22,7 @@ HyperCell evaluates Excel formulas with full compatibility, supporting 200+ func
 
 ```gradle
 dependencies {
-    implementation 'io.hypercell:hypercell-core:0.1.0'
+    implementation 'com.scoopanalytics.hypercell:hypercell-core:0.1.0'
 }
 ```
 
@@ -30,7 +30,7 @@ dependencies {
 
 ```xml
 <dependency>
-    <groupId>io.hypercell</groupId>
+    <groupId>com.scoopanalytics.hypercell</groupId>
     <artifactId>hypercell-core</artifactId>
     <version>0.1.0</version>
 </dependency>
@@ -39,9 +39,9 @@ dependencies {
 ### Basic Usage
 
 ```java
-import io.hypercell.core.grid.MemWorkbook;
-import io.hypercell.core.grid.MemSheet;
-import io.hypercell.core.grid.MemCell;
+import com.scoopanalytics.hypercell.core.grid.MemWorkbook;
+import com.scoopanalytics.hypercell.core.grid.MemSheet;
+import com.scoopanalytics.hypercell.core.grid.MemCell;
 
 // Create a workbook programmatically
 MemWorkbook workbook = new MemWorkbook();
@@ -66,7 +66,7 @@ Number result = sheet.getCellAt(0, 2).getNumberValue();  // 300
 ### Loading Excel Files
 
 ```java
-import io.hypercell.core.grid.MemWorkbook;
+import com.scoopanalytics.hypercell.core.grid.MemWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileInputStream;
 
@@ -217,7 +217,7 @@ All 82,881 validated formulas produce identical results to Excel.
 ### Custom Functions
 
 ```java
-import io.hypercell.api.FunctionRegistry;
+import com.scoopanalytics.hypercell.api.FunctionRegistry;
 
 // Get the function registry and register a custom function
 FunctionRegistry registry = workbook.getRegistry();
@@ -235,8 +235,8 @@ formulaCell.setFormula("=DOUBLE(A1)");
 Implement `EvaluationContext` to provide external data:
 
 ```java
-import io.hypercell.api.EvaluationContext;
-import io.hypercell.api.DataSource;
+import com.scoopanalytics.hypercell.api.EvaluationContext;
+import com.scoopanalytics.hypercell.api.DataSource;
 
 public class MyContext implements EvaluationContext {
     @Override

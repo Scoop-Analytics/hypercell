@@ -59,13 +59,13 @@ This allows you to inject:
 *   **API Calls**: A function that hits a REST endpoint.
 *   **Machine Learning**: A function that runs an inference model.
 
-## 6. Expression Engine (`io.hypercell.core.expression`)
+## 6. Expression Engine (`com.scoopanalytics.hypercell.core.expression`)
 
 The expression engine contains all function implementations, refactored from the original Scoop codebase:
 
-*   **`io.hypercell.core.expression.*`**: Battle-tested function implementations (`MathFunction`, `LookupFunction`, `LogicalFunction`, `TextualFunction`, etc.).
-*   **`io.hypercell.core.grid.*`**: Grid infrastructure (`MemWorkbook`, `MemSheet`, `MemCell`).
-*   **`io.hypercell.api.*`**: Public interfaces (`EvaluationContext`, `FunctionRegistry`, `Expression`).
+*   **`com.scoopanalytics.hypercell.core.expression.*`**: Battle-tested function implementations (`MathFunction`, `LookupFunction`, `LogicalFunction`, `TextualFunction`, etc.).
+*   **`com.scoopanalytics.hypercell.core.grid.*`**: Grid infrastructure (`MemWorkbook`, `MemSheet`, `MemCell`).
+*   **`com.scoopanalytics.hypercell.api.*`**: Public interfaces (`EvaluationContext`, `FunctionRegistry`, `Expression`).
 
 ### Compatibility Stubs
 

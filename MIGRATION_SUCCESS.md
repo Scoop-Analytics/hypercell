@@ -28,7 +28,7 @@ hypercell/
 - **Cleanup:** ✅ 470 zombie files removed (35,291 lines)
 
 ### 🛠️ Completed Work
-- **Package Refactoring:** `scoop.expression` → `io.hypercell.core.expression`
+- **Package Refactoring:** `scoop.expression` → `com.scoopanalytics.hypercell.core.expression`
 - **ScoopContext Decoupling:** Core engine uses `EvaluationContext` interface
 - **Bridge Module:** `hypercell-bridge/` with `ScoopCallbacks` builder pattern
 - **Stub Cleanup:** All stubs removed, zero legacy code

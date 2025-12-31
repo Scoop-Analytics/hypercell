@@ -14,7 +14,7 @@ This refactoring is **high risk** because it involves modifying the "Black Box" 
 **The Pattern:**
 1.  **Identify** a specific Scoop dependency (e.g., `ScoopContext`).
 2.  **Analyze** how it is used in the legacy code (e.g., "It's only used to look up a user ID").
-3.  **Abstract** that capability into the `io.hypercell` API (e.g., add `getUserId()` to `EvaluationContext`).
+3.  **Abstract** that capability into the `com.scoopanalytics.hypercell` API (e.g., add `getUserId()` to `EvaluationContext`).
 4.  **Inject** the abstraction into the legacy code.
 5.  **Delete** the specific Scoop dependency import and stub.
 
@@ -28,8 +28,8 @@ This refactoring is **high risk** because it involves modifying the "Black Box" 
 **Target:** `scoop.expression.CompileContext`
 **Current State:** Holds a reference to `ScoopContext`.
 **Plan:**
-1.  Modify `scoop.expression.CompileContext` to hold `io.hypercell.api.EvaluationContext` instead of `ScoopContext`.
-2.  Update `io.hypercell.core.expression.Compile` (the bridge) to pass the `EvaluationContext` (which is `MemSheet`) when creating `CompileContext`.
+1.  Modify `scoop.expression.CompileContext` to hold `com.scoopanalytics.hypercell.api.EvaluationContext` instead of `ScoopContext`.
+2.  Update `com.scoopanalytics.hypercell.core.expression.Compile` (the bridge) to pass the `EvaluationContext` (which is `MemSheet`) when creating `CompileContext`.
 3.  **Compile & Fix:** This will break every function that calls `cc.getSc()`. We will fix them one by one in subsequent steps.
 
 ### Step 1.2: Refactor `MathFunction` & `TextualFunction`
@@ -91,7 +91,7 @@ Cleaning up the final, structural stubs.
 ### Step 4.1: Consolidate Exceptions
 **Target:** `scoop.ScoopException`
 **Plan:**
-1.  Replace all usages of `ScoopException` with `io.hypercell.api.exception.HyperCellException` (or standard Java exceptions).
+1.  Replace all usages of `ScoopException` with `com.scoopanalytics.hypercell.api.exception.HyperCellException` (or standard Java exceptions).
 2.  **Delete:** `scoop.ScoopException.java`.
 
 ### Step 4.2: Consolidate Grid Structures
@@ -99,12 +99,12 @@ Cleaning up the final, structural stubs.
 **Plan:**
 1.  These are likely used by `ExcelDataGrid` (if copied) or `FormatCache`.
 2.  If `ExcelDataGrid` is not used by the core engine (it's usually for loading, which `MemWorkbook` now handles), verify if it can be deleted.
-3.  If `CellFormat` is used by `TextualFunction` (for `TEXT` function), move it to `io.hypercell.core.format` and refactor `TextualFunction` to use the moved class.
+3.  If `CellFormat` is used by `TextualFunction` (for `TEXT` function), move it to `com.scoopanalytics.hypercell.core.format` and refactor `TextualFunction` to use the moved class.
 
 ---
 
 ## 🏁 Success Criteria
 
-1.  **Zero `scoop.*` source files** in `hypercell-core` (except perhaps the functions themselves if we decide to keep the package name for "Legacy" reasons, but they should depend on `io.hypercell` interfaces).
+1.  **Zero `scoop.*` source files** in `hypercell-core` (except perhaps the functions themselves if we decide to keep the package name for "Legacy" reasons, but they should depend on `com.scoopanalytics.hypercell` interfaces).
 2.  **Dependency Injection:** The legacy functions accept `EvaluationContext` and `FunctionRegistry`.
 3.  **Tests Pass:** 100% of `CrossValidationTest` passes throughout the process.

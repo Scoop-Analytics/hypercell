@@ -4,7 +4,7 @@ plugins {
 }
 
 allprojects {
-    group = 'io.hypercell'
+    group = 'com.scoopanalytics.hypercell'
     version = '0.1.0-SNAPSHOT'
 
     repositories {

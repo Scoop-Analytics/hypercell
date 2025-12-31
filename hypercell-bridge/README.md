@@ -50,10 +50,10 @@ The bridge module:
 The simplest way to integrate is using callbacks (no subclassing required):
 
 ```java
-import io.hypercell.bridge.scoop.ScoopCallbacks;
-import io.hypercell.bridge.scoop.ScoopIntegration;
-import io.hypercell.bridge.ExtendedWorkbook;
-import io.hypercell.core.grid.MemWorkbook;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopCallbacks;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopIntegration;
+import com.scoopanalytics.hypercell.bridge.ExtendedWorkbook;
+import com.scoopanalytics.hypercell.core.grid.MemWorkbook;
 
 // Create callbacks with Scoop-specific logic
 ScoopCallbacks callbacks = ScoopCallbacks.builder()
@@ -178,7 +178,7 @@ For more control, you can extend the abstract classes:
 ```java
 package scoop.hypercell;
 
-import io.hypercell.bridge.scoop.ScoopEvaluationContext;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopEvaluationContext;
 import scoop.ScoopContext;
 
 public class ScoopContextAdapter extends ScoopEvaluationContext {
@@ -210,9 +210,9 @@ public class ScoopContextAdapter extends ScoopEvaluationContext {
 ```java
 package scoop.hypercell;
 
-import io.hypercell.bridge.scoop.ScoopQueryRefreshHandler;
-import io.hypercell.core.grid.MemWorkbook;
-import io.hypercell.core.grid.MemSheet;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopQueryRefreshHandler;
+import com.scoopanalytics.hypercell.core.grid.MemWorkbook;
+import com.scoopanalytics.hypercell.core.grid.MemSheet;
 
 public class ScoopQueryHandler extends ScoopQueryRefreshHandler {
     private final ScoopContext sc;
@@ -273,8 +273,8 @@ Object value = workbook.getCellValue("Sheet1", 0, 0);
 
 ```gradle
 dependencies {
-    api 'io.hypercell:hypercell-core:0.1.0'
-    api 'io.hypercell:hypercell-api:0.1.0'
+    api 'com.scoopanalytics.hypercell:hypercell-core:0.1.0'
+    api 'com.scoopanalytics.hypercell:hypercell-api:0.1.0'
 }
 ```
 

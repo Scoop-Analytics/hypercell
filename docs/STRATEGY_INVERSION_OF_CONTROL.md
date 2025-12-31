@@ -30,7 +30,7 @@ Functions like `SCOOPLOOKUP`, `SCOOPAPPLYMODEL`, `SCOOPNEXTCONVERSION` are purel
     *   Retain the grammar tokens (`SCOOPLOOKUP`, etc.) to support parsing.
     *   In `Compile.java`, instead of hardcoding `new ScoopFunction(...)`, perform a lookup: `registry.getFunction("SCOOPLOOKUP")`.
 *   **Scoop App Responsibility:**
-    *   Implement the logic currently in `ScoopFunction.java` as a class implementing `io.hypercell.api.Function`.
+    *   Implement the logic currently in `ScoopFunction.java` as a class implementing `com.scoopanalytics.hypercell.api.Function`.
     *   Register this function at startup: `registry.register("SCOOPLOOKUP", new ScoopLookupImplementation(myScoopContext));`
 *   **Result:** `ScoopFunction.java` and its ~20 dependent stubs (`scoop.ai.*`, `scoop.metadata.*`, etc.) can be **deleted** from HyperCell.
 
@@ -39,7 +39,7 @@ Some standard functions (`SUMIF`, `AVERAGEIF`) have "side effects" in Scoop, spe
 
 *   **Strategy:** Abstract the side effect into an interface.
 *   **HyperCell Responsibility:**
-    *   Define `io.hypercell.api.DataRefresher` interface:
+    *   Define `com.scoopanalytics.hypercell.api.DataRefresher` interface:
         ```java
         public interface DataRefresher {
             void ensureDataLoaded(String sheetName);
@@ -57,7 +57,7 @@ Some standard functions (`SUMIF`, `AVERAGEIF`) have "side effects" in Scoop, spe
 ## 3. Execution Plan
 
 ### Step 1: Define Interfaces (HyperCell API)
-1.  Create `io.hypercell.api.DataRefresher` (or similar name).
+1.  Create `com.scoopanalytics.hypercell.api.DataRefresher` (or similar name).
 2.  Ensure `FunctionRegistry` is robust enough to handle the complex arguments required by Scoop functions.
 
 ### Step 2: Refactor `Compile.java` & `CompileContext`

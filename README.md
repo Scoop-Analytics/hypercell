@@ -53,9 +53,9 @@ cd oss/
 ```
 
 ```java
-import io.hypercell.core.grid.MemWorkbook;
-import io.hypercell.core.grid.MemSheet;
-import io.hypercell.core.grid.MemCell;
+import com.scoopanalytics.hypercell.core.grid.MemWorkbook;
+import com.scoopanalytics.hypercell.core.grid.MemSheet;
+import com.scoopanalytics.hypercell.core.grid.MemCell;
 
 // Load Excel file
 MemWorkbook workbook = new MemWorkbook("model.xlsx", poiWorkbook, true);
@@ -71,9 +71,9 @@ double value = sheet.getCellAt(0, 0).getNumberValue().doubleValue();
 ### Enterprise Integration (Scoop)
 
 ```java
-import io.hypercell.bridge.scoop.ScoopCallbacks;
-import io.hypercell.bridge.scoop.ScoopIntegration;
-import io.hypercell.bridge.ExtendedWorkbook;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopCallbacks;
+import com.scoopanalytics.hypercell.bridge.scoop.ScoopIntegration;
+import com.scoopanalytics.hypercell.bridge.ExtendedWorkbook;
 
 // Configure callbacks (no subclassing required)
 ScoopCallbacks callbacks = ScoopCallbacks.builder()
@@ -144,10 +144,10 @@ repositories {
 
 dependencies {
     // Open source core
-    implementation 'io.hypercell:hypercell-core:0.1.0'
+    implementation 'com.scoopanalytics.hypercell:hypercell-core:0.1.0'
 
     // Enterprise bridge (optional)
-    implementation 'io.hypercell:hypercell-bridge:0.1.0'
+    implementation 'com.scoopanalytics.hypercell:hypercell-bridge:0.1.0'
 }
 ```
 
@@ -162,7 +162,7 @@ dependencies {
 </repositories>
 
 <dependency>
-    <groupId>io.hypercell</groupId>
+    <groupId>com.scoopanalytics.hypercell</groupId>
     <artifactId>hypercell-core</artifactId>
     <version>0.1.0</version>
 </dependency>
