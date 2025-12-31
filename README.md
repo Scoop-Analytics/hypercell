@@ -263,7 +263,7 @@ HyperCell is optimized for high-performance calculation scenarios:
 
 ## Enterprise Integration
 
-For enterprise features like query refresh, audit logging, and multi-tenant support, see the [hypercell-bridge](../hypercell-bridge/) module.
+For enterprise features like query refresh, audit logging, and multi-tenant support, contact [Scoop Analytics](https://scoopanalytics.com).
 
 ## License
 
