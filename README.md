@@ -126,24 +126,55 @@ Mismatches found:     0
 
 ## Installation
 
+JARs are published to [GitHub Packages](https://github.com/Scoop-Analytics/hypercell/packages).
+
 ### Gradle
 
 ```gradle
-// Open source core
-implementation 'io.hypercell:hypercell-core:0.1.0'
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/Scoop-Analytics/hypercell")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
 
-// Enterprise bridge (optional)
-implementation 'io.hypercell:hypercell-bridge:0.1.0'
+dependencies {
+    // Open source core
+    implementation 'io.hypercell:hypercell-core:0.1.0'
+
+    // Enterprise bridge (optional)
+    implementation 'io.hypercell:hypercell-bridge:0.1.0'
+}
 ```
 
 ### Maven
 
 ```xml
+<repositories>
+    <repository>
+        <id>github</id>
+        <url>https://maven.pkg.github.com/Scoop-Analytics/hypercell</url>
+    </repository>
+</repositories>
+
 <dependency>
     <groupId>io.hypercell</groupId>
     <artifactId>hypercell-core</artifactId>
     <version>0.1.0</version>
 </dependency>
+```
+
+Configure authentication in `~/.m2/settings.xml`:
+```xml
+<server>
+    <id>github</id>
+    <username>YOUR_GITHUB_USERNAME</username>
+    <password>YOUR_GITHUB_TOKEN</password>
+</server>
 ```
 
 ## Documentation

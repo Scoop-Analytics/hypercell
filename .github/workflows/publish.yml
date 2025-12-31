@@ -1,0 +1,62 @@
+name: Publish JARs
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 0.1.0)'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Set version from release tag
+      if: github.event_name == 'release'
+      run: |
+        VERSION=${GITHUB_REF_NAME#v}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Set version from input
+      if: github.event_name == 'workflow_dispatch'
+      run: echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+
+    - name: Build all modules
+      run: ./gradlew clean build -x test -Pversion=${{ env.VERSION }}
+
+    - name: Run tests
+      run: ./gradlew test -Pversion=${{ env.VERSION }}
+
+    - name: Publish to GitHub Packages
+      run: ./gradlew publish -Pversion=${{ env.VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload JARs as release assets
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          oss/hypercell-api/build/libs/*.jar
+          oss/hypercell-core/build/libs/*.jar
+          oss/hypercell-formula/build/libs/*.jar
+          oss/hypercell-functions/build/libs/*.jar
