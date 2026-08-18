@@ -16,6 +16,7 @@ Thumbs.db
 *.war
 *.ear
 *.log
+/hypercell-formula/bin/
 
 # JARs (except gradle wrapper)
 *.jar
